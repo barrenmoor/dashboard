@@ -33,9 +33,35 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 
 		$(document).ready(function() {
 			$(window).on("resize", setDashboardArea);
+			$(".widget").draggable({
+				revert: true, 
+				stack: ".widget", 
+				opacity: 0.7, 
+			});
+
+			$(".widget").droppable({
+				drop: function(event, ui) {
+					var destTitle = $("#" + this.id + " > .widget-table > tbody > .widget-title > .widget-cell").text();
+					var srcTitle = $("#" + ui.helper[0].id + " > .widget-table > tbody > .widget-title > .widget-cell").text();
+
+					$("#" + this.id + " > .widget-table > tbody > .widget-title > .widget-cell").text(srcTitle);
+					$("#" + ui.helper[0].id + " > .widget-table > tbody > .widget-title > .widget-cell").text(destTitle);
+
+					$("#" + this.id).css("border", "none");
+				},
+
+				over: function(event, ui) {
+					$("#" + this.id).css("border", "dashed 1px");
+				},
+
+				out: function(event, ui) {
+					$("#" + this.id).css("border", "none");
+				}
+			});
 		});
 
 		setDashboardArea();
+
 	});
 });
 
@@ -51,7 +77,7 @@ angular.module('widgets', [])
 				'<td class="widget-cell">{{title}}</td>' +
 			'</tr>' +
 			'<tr>' +
-				'<td class="widget-cell widget-content"><img src="images/loading-4.gif"></td>' +
+				'<td class="widget-cell widget-content"><img src="images/loading-3.gif"></td>' +
 			'</tr>' +
 		'</table>',
 		replace: true,
