@@ -1,0 +1,35 @@
+body {
+	padding-left: 125px;
+	padding-right: 125px;
+
+	padding-top: 20px;
+	padding-bottom: 20px;	
+}
+
+#dash-content-id {
+	min-height: 400px;
+	min-width: 600px;
+
+	border: solid 2px;
+	border-radius: 15px;
+
+	padding-left: 6px;
+	padding-top: 6px;
+	padding-right: 6px;
+	padding-bottom: 6px;
+}
+
+.widget {
+	position: relative;
+
+	border: solid 1px;
+	border-radius: 5px;
+}
+
+.myt {
+	padding-left: 6px;
+	padding-top: 6px;
+	padding-right: 6px;
+	padding-bottom: 6px;
+}
+
