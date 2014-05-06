@@ -1,4 +1,5 @@
 var express = require('express');
+var links = require('./serverlib/links');
 
 var app = express();
 
@@ -11,5 +12,6 @@ app.use(express.urlencoded());
 app.use(express.json());
 
 app.use('/dashboard', express.static(__dirname));
+app.get('/dashboard/widgets', links.widgets);
 
 app.listen(8080);

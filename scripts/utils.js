@@ -1,6 +1,6 @@
 var DashContentUtil = function() {
-	var MIN_HEIGHT = 400;
-	var MIN_WIDTH = 600;
+	var MIN_HEIGHT = 500;
+	var MIN_WIDTH = 1000;
 
 	var HEIGHT_PADDING = 60;
 	var WIDTH_PADDING = 250;
@@ -18,10 +18,6 @@ var DashContentUtil = function() {
 					height : height,
 					width : width
 				};
-			},
-
-			getCoordinates : function(index) {
-				console.log(index);
 			}
 		}
 	};
@@ -31,12 +27,12 @@ var DashContentUtil = function() {
 			var windowHeight = $(window).height();
 			var windowWidth = $(window).width();
 
-			var height = windowHeight > MIN_HEIGHT ? (windowHeight - HEIGHT_PADDING) : MIN_HEIGHT;
-			var width = windowWidth > MIN_WIDTH ? (windowWidth - WIDTH_PADDING) : MIN_WIDTH;			
+			var height = (windowHeight - HEIGHT_PADDING) > MIN_HEIGHT ? (windowHeight - HEIGHT_PADDING) : MIN_HEIGHT;
+			var width = (windowWidth - WIDTH_PADDING) > MIN_WIDTH ? (windowWidth - WIDTH_PADDING) : MIN_WIDTH;			
 			
 			return {
-				height : (windowHeight - HEIGHT_PADDING),
-				width : (windowWidth - WIDTH_PADDING)
+				height : height,
+				width : width
 			};
 		},
 
