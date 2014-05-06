@@ -1,4 +1,4 @@
 dashboard
 =========
 
-A customizable dashboard
+A customizable dashboard!
