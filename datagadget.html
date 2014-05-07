@@ -1,6 +1,6 @@
 <table class="widget-content-table">
 	<tr ng-repeat="point in data.values">
-		<td class="content-cell data {{$first || $middle ? 'non-last-row' : ''}}">{{point.value}}</td>
+		<td class="content-cell data {{$first || $middle ? 'non-last-row' : ''}} {{point.style}}">{{point.value}}</td>
 		<td class="content-cell data-label {{$first || $middle ? 'non-last-row' : ''}}">{{point.label}}</td>
 	</tr>
 </table>

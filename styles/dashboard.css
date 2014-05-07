@@ -3,7 +3,8 @@ body {
 	padding-right: 125px;
 
 	padding-top: 20px;
-	padding-bottom: 20px;	
+	padding-bottom: 20px;
+	background-color: #121212;
 }
 
 #dash-content-id {
@@ -57,36 +58,40 @@ body {
 	letter-spacing: 2px;
 	color: #FFFFFF;
 
-	background-color: #858513;
+	background-color: #232323;
 	height: 50px;
 	cursor: move;
 }
 
 .widget-content {
-	background-color: #EDEDE1;
-}
+	background-color: #333333;
 
-.droppable-hover {
-	border: dashed 1px;
-}
-
-.widget-content-table {
 	padding-left: 2px;
 	padding-top: 2px;
 	padding-right: 2px;
 	padding-bottom: 2px;
 
+	text-align: center;
+}
+
+.droppable-hover {
+	border: dashed 1px;
+	border-color: #FFFFFF;
+}
+
+.widget-content-table {
 	border: none;
-	width: 100%;
+	width: 95%;
 
 	position: absolute;
-	top: 60px;
+	top: 55px;
 }
 
 .data {
 	font-family: arial;
 	font-size: 36px;
 	font-style: normal;
+	color: #FFFFFF;
 	text-align: right;
 	padding-left: 10px;
 }
@@ -95,16 +100,29 @@ body {
 	font-family: arial;
 	font-size: 12px;
 	font-style: normal;
+	color: #FFFFFF;
 	text-align: left;
 	padding-left: 10px;
 }
 
 .non-last-row {
 	border-bottom: solid 2px;
-	border-color: #FFFFFF;
+	border-color: #ABABAB;
 }
 
 .content-cell {
 	padding-top: 8px;
 	padding-bottom: 8px;
+}
+
+.success {
+	color: #00FF00;
+}
+
+.error {
+	color: #E05441;
+}
+
+.warning {
+	color: #FFFF00;
 }

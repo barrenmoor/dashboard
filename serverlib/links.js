@@ -84,23 +84,24 @@ exports.cibuild = function(req, res) {
 
         	res.send({
         		values : [{
-        			label: "Total Tests",
-        			value: json.totalCount
+        			label: "Passed Tests",
+        			value: json.totalCount - json.failCount,
+        			style: 'success'
         		}, {
         			label: "Failed Tests",
-        			value: json.failCount
+        			value: json.failCount,
+        			style: 'error'
         		}, {
         			label: "Skipped Tests",
-        			value: json.skipCount
+        			value: json.skipCount,
+        			style: 'warning'
         		}, {
         			label: "Longest Running Test",
         			value: format(Number(longestRunning).toFixed(0))
         		}, {
         			label: "Top 10 Tests",
         			value: format(Number(toptests).toFixed(0))
-        		}],
-        		threshold: 0,
-        		attribute: 1        		
+        		}]
         	});
         });
 	});
