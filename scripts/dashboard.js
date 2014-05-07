@@ -33,35 +33,31 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 
 		$(document).ready(function() {
 			$(window).on("resize", setDashboardArea);
+
 			$(".widget").draggable({
-				revert: true, 
-				stack: ".widget", 
-				opacity: 0.7, 
+				revert: true,
+				opacity: 0.7,
+				zIndex: 100
 			});
 
 			$(".widget").droppable({
+				hoverClass: 'droppable-hover',
+				tolerance: 'pointer',
+				accept: '.widget',
 				drop: function(event, ui) {
-					var destTitle = $("#" + this.id + " > .widget-table > tbody > .widget-title > .widget-cell").text();
-					var srcTitle = $("#" + ui.helper[0].id + " > .widget-table > tbody > .widget-title > .widget-cell").text();
+					var destHtml = $("#" + this.id).html();
+					var srcHtml = $("#" + ui.helper[0].id).html();
 
-					$("#" + this.id + " > .widget-table > tbody > .widget-title > .widget-cell").text(srcTitle);
-					$("#" + ui.helper[0].id + " > .widget-table > tbody > .widget-title > .widget-cell").text(destTitle);
+					$("#" + this.id).empty();
+					$("#" + ui.helper[0].id).empty();
 
-					$("#" + this.id).css("border", "none");
-				},
-
-				over: function(event, ui) {
-					$("#" + this.id).css("border", "dashed 1px");
-				},
-
-				out: function(event, ui) {
-					$("#" + this.id).css("border", "none");
+					$("#" + this.id).append(srcHtml);
+					$("#" + ui.helper[0].id).append(destHtml);
 				}
 			});
 		});
 
 		setDashboardArea();
-
 	});
 });
 
@@ -71,18 +67,44 @@ angular.module('widgets', [])
 	return {
 		restrict: 'E',
 		transclude: true,
-		scope: {title: '@'},
+		scope: {title: '@', dataUrl: '@'},
 		template: '<table class="widget-table">' +
 			'<tr class="widget-title">' +
 				'<td class="widget-cell">{{title}}</td>' +
 			'</tr>' +
 			'<tr>' +
-				'<td class="widget-cell widget-content"><img src="images/loading-3.gif"></td>' +
+				'<td class="widget-cell widget-content">' +
+					'<img src="images/loading-3.gif" ng-hide="widget.loaded"/>' +
+					'<datagadget ng-show="widget.loaded" data="widget.data">' +
+				'</td>' +
 			'</tr>' +
 		'</table>',
 		replace: true,
-		controller: function ($scope, $element) {
-			$scope.title = $element.attr('title');
+		controller: function ($scope, $element, $http) {
+			$scope.widget = {};
+			$scope.widget.loaded = false;
+
+			setTimeout(function() {
+				var dataUrl = $element.attr('dataUrl');
+
+				if(dataUrl.length != 0) {
+					$http.get(dataUrl).success(function(data) {
+						$scope.widget.data = data;
+						$scope.widget.loaded = true;
+					});
+				}
+			}, 1000);
 		}
-	}
+	};
+})
+	
+.directive('datagadget', function() {
+	return {
+		restrict: 'E',
+		transclude: true,
+		scope: {data: '='},
+		template: '<span><span>Total Tests: {{data.total}}</span><br><span>Failed Tests: {{data.failed}}</span></span>',
+		replace: true
+	};
 });
+

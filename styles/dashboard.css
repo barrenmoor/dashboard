@@ -63,3 +63,7 @@ body {
 .widget-content {
 	background-color: #EDEDE1;
 }
+
+.droppable-hover {
+	border: dashed 1px;
+}

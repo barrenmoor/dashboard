@@ -13,5 +13,6 @@ app.use(express.json());
 
 app.use('/dashboard', express.static(__dirname));
 app.get('/dashboard/widgets', links.widgets);
+app.get('/dashboard/cibuild', links.cibuild);
 
 app.listen(8080);
