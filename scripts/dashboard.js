@@ -68,17 +68,7 @@ angular.module('widgets', [])
 		restrict: 'E',
 		transclude: true,
 		scope: {title: '@', dataUrl: '@'},
-		template: '<table class="widget-table">' +
-			'<tr class="widget-title">' +
-				'<td class="widget-cell">{{title}}</td>' +
-			'</tr>' +
-			'<tr>' +
-				'<td class="widget-cell widget-content">' +
-					'<img src="images/loading-3.gif" ng-hide="widget.loaded"/>' +
-					'<datagadget ng-show="widget.loaded" data="widget.data">' +
-				'</td>' +
-			'</tr>' +
-		'</table>',
+		templateUrl: 'widget.html',
 		replace: true,
 		controller: function ($scope, $element, $http) {
 			$scope.widget = {};
@@ -103,7 +93,7 @@ angular.module('widgets', [])
 		restrict: 'E',
 		transclude: true,
 		scope: {data: '='},
-		template: '<span><span>Total Tests: {{data.total}}</span><br><span>Failed Tests: {{data.failed}}</span></span>',
+		templateUrl: 'datagadget.html',
 		replace: true
 	};
 });

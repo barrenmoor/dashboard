@@ -33,7 +33,7 @@ exports.widgets = function(req, res) {
 exports.cibuild = function(req, res) {
 	var request = http.request({
 		host: 'bgl-ccbu-kabini',
-		path: '/jenkins/view/CUIC_MAVEN/job/cuic_1051_ci/lastSuccessfulBuild/testReport/',
+		path: '/jenkins/view/CUIC_MAVEN/job/cuic_1051_ci/lastSuccessfulBuild/testReport/api/json',
 		method: 'GET'
 	}, function(response) {
 		var output = '';
@@ -43,34 +43,65 @@ exports.cibuild = function(req, res) {
         });
 
         response.on('end', function() {
-            var xml = output;
-            var doc = new dom().parseFromString(xml);
-			var nodes = xpath.select("//td[@id='main-panel']/div/div", doc);
+        	var json = JSON.parse(output);
 
-			var failCount = -1;
-			var totalCount = -1;
+        	var durations = [];
+        	var longestRunning = 0;
+        	for(var i in json.childReports) {
+        		var suites = json.childReports[i].result.suites;
+        		for(var j in suites) {
+        			var cases = suites[j].cases;
+        			for(var k in cases) {
+        				durations.push(parseFloat(cases[k].duration));
+        				if(longestRunning < cases[k].duration) {
+        					longestRunning = cases[k].duration;
+        				}
+        			}
+        		}
+        	}
 
-			var splitFind = function(str) {
-				str = str.split(" ");
-				for(var i in str) {
-					if(str[i].length != 0 && str[i] != '\n') {
-						return str[i].replace(",", "");
-					}
-				}
-				return '-1';
-			};
+        	durations.sort(function(a, b) {
+        		return (b - a);
+        	});
 
-			if(nodes) {
-				failCount = splitFind(nodes[0].firstChild.data);
-				totalCount = splitFind(nodes[2].firstChild.data);
-			} else {
-				console.log('nothing found');
-			}
+        	var toptests = 0.0;
+        	for(var i = 0; i < 10; i++) {
+        		toptests += durations[i];
+        	}
 
-			res.send({
-				total: totalCount,
-				failed: failCount
-			});
+        	var format = function(val) {
+    			var hrs = parseInt(val / 3600);
+    			hrs = hrs < 10 ? "0" + hrs : hrs;
+
+    			var mins = parseInt((val - (hrs * 3600)) / 60);
+    			mins = mins < 10 ? "0" + mins : mins;
+
+    			var secs = val - (hrs * 3600) - (mins * 60);
+    			secs = secs < 10 ? "0" + secs : secs;
+
+    			return (hrs == "00" ? "" : hrs + ":") + mins + ":" + secs;
+        	};
+
+        	res.send({
+        		values : [{
+        			label: "Total Tests",
+        			value: json.totalCount
+        		}, {
+        			label: "Failed Tests",
+        			value: json.failCount
+        		}, {
+        			label: "Skipped Tests",
+        			value: json.skipCount
+        		}, {
+        			label: "Longest Running Test",
+        			value: format(Number(longestRunning).toFixed(0))
+        		}, {
+        			label: "Top 10 Tests",
+        			value: format(Number(toptests).toFixed(0))
+        		}],
+        		threshold: 0,
+        		attribute: 1        		
+        	});
         });
 	});
 

@@ -23,6 +23,8 @@ body {
 	padding-top: 0px;
 	padding-right: 0px;
 	padding-bottom: 0px;
+	
+	overflow: hidden;
 }
 
 .widget-container {
@@ -66,4 +68,43 @@ body {
 
 .droppable-hover {
 	border: dashed 1px;
+}
+
+.widget-content-table {
+	padding-left: 2px;
+	padding-top: 2px;
+	padding-right: 2px;
+	padding-bottom: 2px;
+
+	border: none;
+	width: 100%;
+
+	position: absolute;
+	top: 60px;
+}
+
+.data {
+	font-family: arial;
+	font-size: 36px;
+	font-style: normal;
+	text-align: right;
+	padding-left: 10px;
+}
+
+.data-label {
+	font-family: arial;
+	font-size: 12px;
+	font-style: normal;
+	text-align: left;
+	padding-left: 10px;
+}
+
+.non-last-row {
+	border-bottom: solid 2px;
+	border-color: #FFFFFF;
+}
+
+.content-cell {
+	padding-top: 8px;
+	padding-bottom: 8px;
 }

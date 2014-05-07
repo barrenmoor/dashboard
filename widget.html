@@ -1,0 +1,11 @@
+<table class="widget-table">
+	<tr class="widget-title">
+		<td class="widget-cell">{{title}}</td>
+	</tr>
+	<tr>
+		<td class="widget-cell widget-content">
+			<img src="images/loading-3.gif" ng-hide="widget.loaded"/>
+			<datagadget ng-show="widget.loaded" data="widget.data">
+		</td>
+	</tr>
+</table>
