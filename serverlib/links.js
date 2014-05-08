@@ -117,7 +117,9 @@ exports.defectcount = function(req, res) {
 			var threshold = parseInt(browser.text("tr:nth-child(2) > td > table > tbody td:nth-child(2) tr:nth-child(23) > td:nth-child(5) > font"));
 
 			if(isNaN(outstanding) || isNaN(threshold)) {
-				res.status(500).send({});
+				res.status(500).send({
+					error: "Internal Server Error!"
+				});
 			} else {
 				res.send({
 					actual: parseInt(outstanding),
@@ -130,3 +132,159 @@ exports.defectcount = function(req, res) {
 		});
 };
 
+exports.linecoverage = function(req, res) {
+	var Browser = require('zombie');
+	var browser = new Browser({ debug: true, runScripts: true });
+
+	browser.visit("http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756")
+		.then(function() {
+			var linecoverage = parseFloat(browser.text("th > span#m_line_coverage").replace("%", ""));
+
+			if(isNaN(linecoverage)) {
+				res.status(500).send({
+					error: "Internal Server Error!"
+				});
+			} else {
+				res.send({
+					value: linecoverage
+				});				
+			}
+		})
+		.then(function() {
+			browser.close();
+		});
+};
+
+exports.branchcoverage = function(req, res) {
+	var Browser = require('zombie');
+	var browser = new Browser({ debug: true, runScripts: true });
+
+	browser.visit("http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756")
+		.then(function() {
+			var branchcoverage = parseFloat(browser.text("th > span#m_branch_coverage").replace("%", ""));
+
+			if(isNaN(branchcoverage)) {
+				res.status(500).send({
+					error: "Internal Server Error!"
+				});
+			} else {
+				res.send({
+					value: branchcoverage
+				});				
+			}
+		})
+		.then(function() {
+			browser.close();
+		});
+};
+
+exports.staticviolations = function(req, res) {
+	var Browser = require('zombie');
+	var browser = new Browser({ debug: true, runScripts: true });
+
+	browser.visit("http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/503756")
+		.then(function() {
+			var total = 0;
+			var ids = ["m_blocker_violations", "m_critical_violations", "m_major_violations", "m_minor_violations", "m_info_violations"];
+
+			for(var i in ids) {
+				var val = parseInt(browser.text("span#" + ids[i]));
+				if(isNaN(val)) {
+					res.status(500).send({
+						error: "Internal Server Error!"
+					});
+					return;
+				} else {
+					total += val;
+				}
+			}
+
+			res.send({
+				value: total
+			});
+		})
+		.then(function() {
+			browser.close();
+		});
+};
+
+exports.defectdistribution = function(req, res) {
+	var Browser = require('zombie');
+	var browser = new Browser({ debug: true, runScripts: true });
+
+	var DefectDistributionCalc = function() {
+		var teams = [{
+			team: "Evoque",
+			members: ["asrambik", "rottayil", "vandatho", "vgahoi"]
+		}, {
+			team: "Snipers",
+			members: ["serrabel", "mevelu", "pperiasa", "rmurugan", "ycb"]
+		}, {
+			team: "Vipers",
+			members: ["srevunur", "ssonnad", "visgiri", "rajagkri"]
+		}, {
+			team: "Range Rover",
+			members: ["agartia", "cthadika", "sasivana", "shailjas", "vesane"]
+		}, {
+			team: "Hummer",
+			members: ["dihegde", "karajase", "mandhing", "shidas", "sobenny"]
+		}, {
+			team: "Documentation",
+			members: ["jnishant"]
+		}];
+
+		var series = [{
+			x: "Others",
+			y: 0
+		}];
+
+		for(var i in teams) {
+			series.push({
+				x: teams[i].team,
+				y: 0
+			});
+		}
+
+		var findTeam = function(member) {
+			for(var i in teams) {
+				if(teams[i].members.indexOf(member) != -1) {
+					return teams[i].team;
+				}
+			}
+			return "Others";
+		};
+
+		return {
+			updateSeries : function(owner) {
+				var team = findTeam(owner);
+				for(var i in series) {
+					if(series[i].x == team) {
+						series[i].y++;
+					}
+				}
+			},
+
+			getSeries : function() {
+				return series;
+			}
+		};	
+	};
+
+	browser.visit("http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html")
+		.then(function() {
+			var owners = browser.queryAll("table#Severity table.solid_blue_border_full tr td:nth-child(3)");
+			var calculator = new DefectDistributionCalc();
+
+			for(var i in owners) {
+				var owner = owners[i].innerHTML.trim();
+				calculator.updateSeries(owner);
+			}
+
+			res.send({
+				series: calculator.getSeries()
+			});
+		})
+		.then(function() {
+			browser.close();
+		});
+};

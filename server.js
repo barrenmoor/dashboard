@@ -15,5 +15,9 @@ app.use('/dashboard', express.static(__dirname));
 app.get('/dashboard/widgets', links.widgets);
 app.get('/dashboard/cibuild', links.cibuild);
 app.get('/dashboard/defectcount', links.defectcount);
+app.get('/dashboard/linecoverage', links.linecoverage);
+app.get('/dashboard/branchcoverage', links.branchcoverage);
+app.get('/dashboard/staticviolations', links.staticviolations);
+app.get('/dashboard/defectdistribution', links.defectdistribution);
 
 app.listen(8080);
