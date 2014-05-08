@@ -1,6 +1,4 @@
 var http = require('http');
-var xpath = require('xpath');
-var dom = require('xmldom').DOMParser;
 
 exports.widgets = function(req, res) {
 	res.send([{
@@ -22,10 +20,10 @@ exports.widgets = function(req, res) {
 	}, {
 		title: 'DEFECTS COUNT',
 		type: 'ABSOLUTE',
-		dataUrl: ''
+		dataUrl: 'defectcount'
 	}, {
 		title: 'CI BUILD',
-		type: 'ABSOLUTE',
+		type: 'MULTISTAT',
 		dataUrl: 'cibuild'
 	}]);
 };
@@ -107,4 +105,28 @@ exports.cibuild = function(req, res) {
 	});
 
 	request.end();
-}
+};
+
+exports.defectcount = function(req, res) {
+	var Browser = require('zombie');
+	var browser = new Browser({ debug: true, runScripts: true });
+
+	browser.visit("http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/index.html")
+		.then(function() {
+			var outstanding = parseInt(browser.text("a[href='/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html']"));
+			var threshold = parseInt(browser.text("tr:nth-child(2) > td > table > tbody td:nth-child(2) tr:nth-child(23) > td:nth-child(5) > font"));
+
+			if(isNaN(outstanding) || isNaN(threshold)) {
+				res.status(500).send({});
+			} else {
+				res.send({
+					actual: parseInt(outstanding),
+					threshold: parseInt(threshold)
+				});					
+			}
+		})
+		.then(function() {
+			browser.close();
+		});
+};
+

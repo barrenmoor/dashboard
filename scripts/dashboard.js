@@ -8,7 +8,7 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 		});
 })
 
-.controller('MainCtrl', function($scope, $http) {
+.controller('MainCtrl', function($scope, $http) {	
 	$http.get('widgets').success(function(widgetData) {
 		$scope.widgets = widgetData;
 
@@ -67,7 +67,7 @@ angular.module('widgets', [])
 	return {
 		restrict: 'E',
 		transclude: true,
-		scope: {title: '@', dataUrl: '@'},
+		scope: {title: '@', dataUrl: '@', type: '@'},
 		templateUrl: 'widget.html',
 		replace: true,
 		controller: function ($scope, $element, $http) {
@@ -76,12 +76,25 @@ angular.module('widgets', [])
 
 			setTimeout(function() {
 				var dataUrl = $element.attr('dataUrl');
+				var type = $element.attr('type');
 
 				if(dataUrl.length != 0) {
 					$http.get(dataUrl).success(function(data) {
+						data.type = type;
 						$scope.widget.data = data;
 						$scope.widget.loaded = true;
+					}).error(function() {
+						//TODO: revisit later on
+						//how do we refresh a gadget?
+						$scope.widget.data = {};
+						$scope.widget.loaded = true;
 					});
+				} else {
+					//TODO: remove else case later
+					var data = {};
+					data.type = type;
+					$scope.widget.data = data;
+					$scope.widget.loaded = true;
 				}
 			}, 1000);
 		}

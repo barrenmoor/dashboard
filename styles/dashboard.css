@@ -116,13 +116,38 @@ body {
 }
 
 .success {
-	color: #00FF00;
+	color: #00FF00 !important;
 }
 
 .error {
-	color: #E05441;
+	color: #E05441 !important;
 }
 
 .warning {
-	color: #FFFF00;
+	color: #FFFF00 !important;
 }
+
+.big-data {
+	font-family: arial;
+	font-size: 80px;
+	font-style: normal;
+	color: #FFFFFF;
+	text-align: left;
+	padding-left: 10px;	
+}
+
+.absolute-icon-success {
+	position: absolute;
+	top: 20px;
+	left: 50px;
+	display: inline;
+	overflow: hidden;
+}
+
+.absolute-icon-error {
+	position: absolute;
+	top: 30px;
+	left: 80px;
+	display: inline;
+	overflow: hidden;
+}}

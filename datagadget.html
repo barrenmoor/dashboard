@@ -1,6 +1,15 @@
 <table class="widget-content-table">
-	<tr ng-repeat="point in data.values">
+	<tr ng-if="data.type == 'MULTISTAT'" ng-repeat="point in data.values">
 		<td class="content-cell data {{$first || $middle ? 'non-last-row' : ''}} {{point.style}}">{{point.value}}</td>
 		<td class="content-cell data-label {{$first || $middle ? 'non-last-row' : ''}}">{{point.label}}</td>
+	</tr>
+	<tr ng-if="data.type == 'ABSOLUTE'">
+		<td class="content-cell big-data">
+			<span class="{{data.actual < data.threshold ? 'success' : 'error'}}">
+				{{data.actual}}
+				<img ng-if="data.actual < data.threshold" class="absolute-icon-success" src="images/all-good.png">
+				<img ng-if="data.actual > data.threshold" class="absolute-icon-error" src="images/not-so-good.png">
+			</span>
+		</td>
 	</tr>
 </table>
