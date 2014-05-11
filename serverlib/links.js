@@ -108,28 +108,38 @@ exports.cibuild = function(req, res) {
 };
 
 exports.defectcount = function(req, res) {
-	var Browser = require('zombie');
-	var browser = new Browser({ debug: true, runScripts: true });
+	var phantom = require('phantom');
+	phantom.create(function(ph) {
+		console.log("opening enotify9-1");
+		return ph.createPage(function(page) {
+			return page.open("http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/index.html", function(status) {
+				console.log("opened enotify9-1? ", status);
+				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
-	browser.visit("http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/index.html")
-		.then(function() {
-			var outstanding = parseInt(browser.text("a[href='/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html']"));
-			var threshold = parseInt(browser.text("tr:nth-child(2) > td > table > tbody td:nth-child(2) tr:nth-child(23) > td:nth-child(5) > font"));
+				page.evaluate(function() {
+					var outstanding = parseInt($("a[href='/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html']").text());
+					var threshold = parseInt($("a[href='/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html']")
+													.parent().parent().parent().parent()
+													.children(":nth-child(5)")
+													.children("font").text());
 
-			if(isNaN(outstanding) || isNaN(threshold)) {
-				res.status(500).send({
-					error: "Internal Server Error!"
+					return {
+						actual: outstanding,
+						threshold: threshold
+					};
+				}, function(result) {
+					if(isNaN(result.actual) || isNaN(result.threshold)) {
+						res.status(500).send({
+							error: "Internal Server Error!"
+						});						
+					} else {
+						res.send(result);
+					}
+					ph.exit();
 				});
-			} else {
-				res.send({
-					actual: parseInt(outstanding),
-					threshold: parseInt(threshold)
-				});					
-			}
-		})
-		.then(function() {
-			browser.close();
+			});
 		});
+	});
 };
 
 exports.linecoverage = function(req, res) {
@@ -234,14 +244,14 @@ exports.defectdistribution = function(req, res) {
 		}];
 
 		var series = [{
-			x: "Others",
-			y: 0
+			label: "Others",
+			value: 0
 		}];
 
 		for(var i in teams) {
 			series.push({
-				x: teams[i].team,
-				y: 0
+				label: teams[i].team,
+				value: 0
 			});
 		}
 
@@ -258,8 +268,8 @@ exports.defectdistribution = function(req, res) {
 			updateSeries : function(owner) {
 				var team = findTeam(owner);
 				for(var i in series) {
-					if(series[i].x == team) {
-						series[i].y++;
+					if(series[i].label == team) {
+						series[i].value++;
 					}
 				}
 			},
@@ -280,9 +290,10 @@ exports.defectdistribution = function(req, res) {
 				calculator.updateSeries(owner);
 			}
 
-			res.send({
-				series: calculator.getSeries()
-			});
+			res.send([{
+				key: "Teams & Defects",
+				values: calculator.getSeries()
+			}]);
 		})
 		.then(function() {
 			browser.close();
