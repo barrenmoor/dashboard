@@ -8,9 +8,6 @@ body {
 }
 
 #dash-content-id {
-	min-height: 400px;
-	min-width: 600px;
-
 	padding-left: 6px;
 	padding-top: 6px;
 	padding-right: 6px;
@@ -150,4 +147,18 @@ body {
 	left: 80px;
 	display: inline;
 	overflow: hidden;
+}
+
+.chart-content-cell {
+	padding-top: 1px;
+	padding-bottom: 1px;
+	height: 60px;
+
+	width: 70%;
+	padding-right: 10px;
+}
+
+.chart-div {
+	display: inline-block;
+	height: 100%;
 }

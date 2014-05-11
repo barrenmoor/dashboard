@@ -1,6 +1,6 @@
 var DashContentUtil = function() {
-	var MIN_HEIGHT = 500;
-	var MIN_WIDTH = 1000;
+	var MIN_HEIGHT = 800;
+	var MIN_WIDTH = 1450;
 
 	var HEIGHT_PADDING = 60;
 	var WIDTH_PADDING = 250;

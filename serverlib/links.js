@@ -4,7 +4,7 @@ exports.widgets = function(req, res) {
 	res.send([{
 		title: 'DEFECT DISTRIBUTION',
 		type: 'CHART',
-		dataUrl: ''
+		dataUrl: 'defectdistribution'
 	}, {
 		title: 'LINE COVERAGE',
 		type: 'DELTA',
@@ -219,9 +219,6 @@ exports.staticviolations = function(req, res) {
 };
 
 exports.defectdistribution = function(req, res) {
-	var Browser = require('zombie');
-	var browser = new Browser({ debug: true, runScripts: true });
-
 	var DefectDistributionCalc = function() {
 		var teams = [{
 			team: "Evoque",
@@ -245,13 +242,15 @@ exports.defectdistribution = function(req, res) {
 
 		var series = [{
 			label: "Others",
-			value: 0
+			value: 0,
+			perc: 0.0
 		}];
 
 		for(var i in teams) {
 			series.push({
 				label: teams[i].team,
-				value: 0
+				value: 0,
+				perc: 0.0
 			});
 		}
 
@@ -262,6 +261,54 @@ exports.defectdistribution = function(req, res) {
 				}
 			}
 			return "Others";
+		};
+
+		var getColorAt = function(at) {
+			var steps = 100;
+			var from = 1, to = 0;
+			at = at > steps ? steps : at;
+
+			var howMany = parseInt(Number(511 * at / steps).toFixed(0));
+
+			var rgb = ["00", "00", "00"];
+			rgb[from] = "ff";
+
+			if(howMany < 256) {
+				var increased = parseInt(howMany).toString(16);
+				increased = increased.length == 1 ? "0" + increased : increased;
+
+				rgb[to] = increased;
+			} else {
+				var reduced = parseInt(511 - howMany).toString(16);
+				reduced = reduced.length == 1 ? "0" + reduced : reduced;
+
+				rgb[to] = "ff";
+				rgb[from] = reduced;
+			}
+
+			return "#" + rgb[0] + rgb[1] + rgb[2];
+		};
+
+
+		var updatePercentages = function() {
+			series.sort(function(a, b) {
+				return b.value - a.value;
+			});
+
+			var max = series[0].value;
+
+			for(var i in series) {
+				if(series[i].value == 0) {
+					break;
+				}
+
+				series[i].perc = parseFloat(Number((series[i].value * 100.0) / max).toFixed(2));
+				series[i].color = getColorAt(series[i].perc);
+			}
+
+			series.sort(function(a, b) {
+				return a.value - b.value;
+			});
 		};
 
 		return {
@@ -275,27 +322,38 @@ exports.defectdistribution = function(req, res) {
 			},
 
 			getSeries : function() {
+				updatePercentages();
 				return series;
 			}
 		};	
 	};
 
-	browser.visit("http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html")
-		.then(function() {
-			var owners = browser.queryAll("table#Severity table.solid_blue_border_full tr td:nth-child(3)");
-			var calculator = new DefectDistributionCalc();
+	var phantom = require('phantom');
+	phantom.create(function(ph) {
+		console.log("opening enotify9-1");
+		return ph.createPage(function(page) {
+			return page.open("http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html", function(status) {
+				console.log("opened enotify9-1? ", status);
+				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
-			for(var i in owners) {
-				var owner = owners[i].innerHTML.trim();
-				calculator.updateSeries(owner);
-			}
+				page.evaluate(function() {
+					var owners = [];
+					$("table#Severity table.solid_blue_border_full tr td:nth-child(3)").each(function() {
+						owners.push($(this).text().trim());
+					});
+					return owners;
+				}, function(result) {
+					var calculator = new DefectDistributionCalc();
+					for(var i in result) {
+						calculator.updateSeries(result[i]);
+					}
+					res.send({
+						values: calculator.getSeries()
+					});
 
-			res.send([{
-				key: "Teams & Defects",
-				values: calculator.getSeries()
-			}]);
-		})
-		.then(function() {
-			browser.close();
+					ph.exit();
+				});
+			});
 		});
+	});
 };

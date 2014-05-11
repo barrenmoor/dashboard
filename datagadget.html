@@ -12,4 +12,11 @@
 			</span>
 		</td>
 	</tr>
+	<tr ng-if="data.type == 'CHART'" ng-repeat="stat in data.values">
+		<td class="chart-content-cell data">
+			<div ng-if="stat.value > 0" class="chart-div" style="width: {{stat.perc}}%; background-color: {{stat.color}}">{{stat.value}} &nbsp;</div>
+			<span ng-if="stat.value == 0">{{stat.value}} &nbsp;</span>
+		</td>
+		<td class="content-cell data-label">{{stat.label}}</td>
+	</tr>
 </table>

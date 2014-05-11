@@ -71,6 +71,9 @@ angular.module('widgets', [])
 		templateUrl: 'widget.html',
 		replace: true,
 		controller: function ($scope, $element, $http) {
+
+			//console.log($scope.$parent.widgets);
+
 			$scope.widget = {};
 			$scope.widget.loaded = false;
 
@@ -82,6 +85,7 @@ angular.module('widgets', [])
 					$http.get(dataUrl).success(function(data) {
 						data.type = type;
 						$scope.widget.data = data;
+						//console.log(data);
 						$scope.widget.loaded = true;
 					}).error(function() {
 						//TODO: revisit later on
