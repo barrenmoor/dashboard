@@ -155,10 +155,17 @@ body {
 	height: 60px;
 
 	width: 70%;
-	padding-right: 10px;
 }
 
 .chart-div {
 	display: inline-block;
 	height: 100%;
+}
+
+.chart-data {
+	font-family: arial;
+	font-size: 36px;
+	font-style: normal;
+	color: #FFFFFF;
+	text-align: right;
 }
