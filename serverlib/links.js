@@ -1,7 +1,5 @@
 var http = require('http');
-
-exports.widgets = function(req, res) {
-	res.send([{
+var dashboardwidgets = [{
 		id: 'cuic-widget-id-0',
 		title: 'DEFECT DISTRIBUTION',
 		type: 'CHART',
@@ -11,19 +9,19 @@ exports.widgets = function(req, res) {
 		id: 'cuic-widget-id-1',
 		title: 'LINE COVERAGE',
 		type: 'DELTA',
-		options: {},
+		options: {green: "up"},
 		dataUrl: ''
 	}, {
 		id: 'cuic-widget-id-2',
 		title: 'BRANCH COVERAGE',
 		type: 'DELTA',
-		options: {},
+		options: {green: "up"},
 		dataUrl: ''
 	}, {
 		id: 'cuic-widget-id-3',
 		title: 'STATIC VIOLATIONS',
 		type: 'DELTA',
-		options: {},
+		options: {green: "down"},
 		dataUrl: ''
 	}, {
 		id: 'cuic-widget-id-4',
@@ -37,7 +35,10 @@ exports.widgets = function(req, res) {
 		type: 'MULTISTAT',
 		options: {},
 		dataUrl: 'cibuild'
-	}]);
+	}];
+
+exports.widgets = function(req, res) {
+	res.send(dashboardwidgets);
 };
 
 exports.cibuild = function(req, res) {
@@ -155,79 +156,104 @@ exports.defectcount = function(req, res) {
 };
 
 exports.linecoverage = function(req, res) {
-	var Browser = require('zombie');
-	var browser = new Browser({ debug: true, runScripts: true });
+	var phantom = require('phantom');
+	phantom.create(function(ph) {
+		console.log("opening sonar");
+		return ph.createPage(function(page) {
+			return page.open("http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756", function(status) {
+				console.log("opened sonar? ", status);
+				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
-	browser.visit("http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756")
-		.then(function() {
-			var linecoverage = parseFloat(browser.text("th > span#m_line_coverage").replace("%", ""));
+				page.evaluate(function() {
+					var linecoverage = parseFloat($("th > span#m_line_coverage").text().replace("%", ""));
 
-			if(isNaN(linecoverage)) {
-				res.status(500).send({
-					error: "Internal Server Error!"
+					return {
+						value: linecoverage
+					};
+				}, function(result) {
+					if(isNaN(result.value)) {
+						res.status(500).send({
+							error: "Internal Server Error!"
+						});
+					} else {
+						res.send(result);				
+					}
+					ph.exit();
 				});
-			} else {
-				res.send({
-					value: linecoverage
-				});				
-			}
-		})
-		.then(function() {
-			browser.close();
+			});
 		});
+	});
 };
 
 exports.branchcoverage = function(req, res) {
-	var Browser = require('zombie');
-	var browser = new Browser({ debug: true, runScripts: true });
+	var phantom = require('phantom');
+	phantom.create(function(ph) {
+		console.log("opening sonar");
+		return ph.createPage(function(page) {
+			return page.open("http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756", function(status) {
+				console.log("opened sonar? ", status);
+				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
-	browser.visit("http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756")
-		.then(function() {
-			var branchcoverage = parseFloat(browser.text("th > span#m_branch_coverage").replace("%", ""));
+				page.evaluate(function() {
+					var branchcoverage = parseFloat($("th > span#m_branch_coverage").text().replace("%", ""));
 
-			if(isNaN(branchcoverage)) {
-				res.status(500).send({
-					error: "Internal Server Error!"
+					return {
+						value: branchcoverage
+					};
+				}, function(result) {
+					if(isNaN(result.value)) {
+						res.status(500).send({
+							error: "Internal Server Error!"
+						});
+					} else {
+						res.send(result);				
+					}
+					ph.exit();
 				});
-			} else {
-				res.send({
-					value: branchcoverage
-				});				
-			}
-		})
-		.then(function() {
-			browser.close();
+			});
 		});
+	});
 };
 
 exports.staticviolations = function(req, res) {
-	var Browser = require('zombie');
-	var browser = new Browser({ debug: true, runScripts: true });
+	var phantom = require('phantom');
+	phantom.create(function(ph) {
+		console.log("opening sonar");
+		return ph.createPage(function(page) {
+			return page.open("http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/503756", function(status) {
+				console.log("opened sonar? ", status);
+				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
-	browser.visit("http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/503756")
-		.then(function() {
-			var total = 0;
-			var ids = ["m_blocker_violations", "m_critical_violations", "m_major_violations", "m_minor_violations", "m_info_violations"];
+				page.evaluate(function() {
+					var total = 0;
+					var spanIds = ["m_blocker_violations", "m_critical_violations", "m_major_violations", "m_minor_violations", "m_info_violations"];
 
-			for(var i in ids) {
-				var val = parseInt(browser.text("span#" + ids[i]));
-				if(isNaN(val)) {
-					res.status(500).send({
-						error: "Internal Server Error!"
-					});
-					return;
-				} else {
-					total += val;
-				}
-			}
-
-			res.send({
-				value: total
+					for(var i = 0; i < spanIds.length; i++) {
+						var val = parseInt($("span#" + spanIds[i]).text());
+						if(isNaN(val)) {
+							return {
+								error: "Internal Server Error"
+							};
+						} else {
+							total += val;
+						}
+					}
+					return {
+						value: total
+					};
+				}, function(result) {
+					if(result.error && result.error.length != 0) {
+						res.status(500).send({
+							error: "Internal Server Error!"
+						});
+					} else {
+						res.send(result);
+					}
+					ph.exit();
+				});
 			});
-		})
-		.then(function() {
-			browser.close();
 		});
+	});
 };
 
 exports.defectdistribution = function(req, res) {
