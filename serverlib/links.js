@@ -1,4 +1,6 @@
 var http = require('http');
+var fs = require('fs');
+
 var dashboardwidgets = [{
 		id: 'cuic-widget-id-0',
 		title: 'DEFECT DISTRIBUTION',
@@ -9,13 +11,13 @@ var dashboardwidgets = [{
 		id: 'cuic-widget-id-1',
 		title: 'LINE COVERAGE',
 		type: 'DELTA',
-		options: {green: "up"},
+		options: {},
 		dataUrl: ''
 	}, {
 		id: 'cuic-widget-id-2',
 		title: 'BRANCH COVERAGE',
 		type: 'DELTA',
-		options: {green: "up"},
+		options: {},
 		dataUrl: ''
 	}, {
 		id: 'cuic-widget-id-3',
@@ -36,6 +38,70 @@ var dashboardwidgets = [{
 		options: {},
 		dataUrl: 'cibuild'
 	}];
+
+var DeltaRecordUtil = function(green, value, file, precision) {
+	var response;
+	var delta = 0;
+	var better = false;
+	var precision = precision ? precision : 0;
+
+	var success = function() {
+		response.send({
+			value: Number(value).toFixed(precision),
+			delta: Number(delta).toFixed(precision),
+			better: better
+		});
+	};
+
+	var error = function() {
+		response.status(500).send({
+			error: "Internal Server Error!"
+		});						
+	};
+
+	var getLine = function(prev, curr) {
+		return prev + "," + curr;
+	};
+
+	var getValues = function(line) {
+		var values = line.split(",");
+		return {
+			prev: parseFloat(values[0]),
+			curr: parseFloat(values[1])
+		};
+	}
+
+	return {
+		recordAndRespond: function(res) {
+			response = res;
+
+			if(isNaN(value)) {
+				error();
+			}
+
+			if(fs.existsSync(file)) {
+				fs.readFile(file, function(err, data) {
+					if(err) {
+						error();
+					} else {
+						var prevResults = getValues(data + "");
+
+						delta = value - (value == prevResults.curr ? prevResults.prev : prevResults.curr);
+						better = (green == "up") ? (delta > 0) : (delta < 0);
+
+						if(value != prevResults.curr) {
+							fs.writeFile(file, getLine(prevResults.curr, value), success);
+						} else {
+							success();
+						}
+					}
+				});
+			} else {
+				fs.writeFile(file, getLine(value, value), success);
+			}
+		}
+	};
+};
 
 exports.widgets = function(req, res) {
 	res.send(dashboardwidgets);
@@ -171,13 +237,9 @@ exports.linecoverage = function(req, res) {
 						value: linecoverage
 					};
 				}, function(result) {
-					if(isNaN(result.value)) {
-						res.status(500).send({
-							error: "Internal Server Error!"
-						});
-					} else {
-						res.send(result);				
-					}
+					var util = new DeltaRecordUtil("up", result.value, "linecoverage.txt", 2);
+					util.recordAndRespond(res);
+
 					ph.exit();
 				});
 			});
@@ -201,13 +263,9 @@ exports.branchcoverage = function(req, res) {
 						value: branchcoverage
 					};
 				}, function(result) {
-					if(isNaN(result.value)) {
-						res.status(500).send({
-							error: "Internal Server Error!"
-						});
-					} else {
-						res.send(result);				
-					}
+					var util = new DeltaRecordUtil("up", result.value, "branchcoverage.txt", 2);
+					util.recordAndRespond(res);
+
 					ph.exit();
 				});
 			});
@@ -232,7 +290,7 @@ exports.staticviolations = function(req, res) {
 						var val = parseInt($("span#" + spanIds[i]).text());
 						if(isNaN(val)) {
 							return {
-								error: "Internal Server Error"
+								value: "Internal Server Error"
 							};
 						} else {
 							total += val;
@@ -242,13 +300,9 @@ exports.staticviolations = function(req, res) {
 						value: total
 					};
 				}, function(result) {
-					if(result.error && result.error.length != 0) {
-						res.status(500).send({
-							error: "Internal Server Error!"
-						});
-					} else {
-						res.send(result);
-					}
+					var util = new DeltaRecordUtil("down", result.value, "staticviolations.txt");
+					util.recordAndRespond(res);
+
 					ph.exit();
 				});
 			});
