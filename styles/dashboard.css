@@ -57,6 +57,9 @@ body {
 
 	background-color: #232323;
 	height: 50px;
+}
+
+.widget-draggable {
 	cursor: move;
 }
 

@@ -33,33 +33,35 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 
 		$(document).ready(function() {
 			$(window).on("resize", setDashboardArea);
-
-			$(".widget").draggable({
-				revert: true,
-				opacity: 0.7,
-				zIndex: 100
-			});
-
-			$(".widget").droppable({
-				hoverClass: 'droppable-hover',
-				tolerance: 'pointer',
-				accept: '.widget',
-				drop: function(event, ui) {
-					var destHtml = $("#" + this.id).html();
-					var srcHtml = $("#" + ui.helper[0].id).html();
-
-					$("#" + this.id).empty();
-					$("#" + ui.helper[0].id).empty();
-
-					$("#" + this.id).append(srcHtml);
-					$("#" + ui.helper[0].id).append(destHtml);
-				}
-			});
 		});
 
 		setDashboardArea();
 	});
 });
+
+var setDraggable = function(id) {
+	$("#" + id).parent().draggable({
+		revert: true,
+		opacity: 0.7,
+		zIndex: 100
+	});
+
+	$("#" + id).parent().droppable({
+		hoverClass: 'droppable-hover',
+		tolerance: 'pointer',
+		accept: '.widget',
+		drop: function(event, ui) {
+			var destHtml = $("#" + this.id).html();
+			var srcHtml = $("#" + ui.helper[0].id).html();
+
+			$("#" + this.id).empty();
+			$("#" + ui.helper[0].id).empty();
+
+			$("#" + this.id).append(srcHtml);
+			$("#" + ui.helper[0].id).append(destHtml);
+		}
+	});
+};
 
 angular.module('widgets', [])
 
@@ -95,17 +97,26 @@ angular.module('widgets', [])
 					$http.get(dataUrl).success(function(data) {
 						$scope.widget.data = data;
 						$scope.widget.loaded = true;
+						if(options.draggable) {
+							setDraggable(id);
+						}
 					}).error(function() {
 						//TODO: revisit later on
 						//how do we refresh a gadget?
 						$scope.widget.data = {};
 						$scope.widget.loaded = true;
+						if(options.draggable) {
+							setDraggable(id);
+						}
 					});
 				} else {
 					//TODO: remove else case later
 					var data = {};
 					$scope.widget.data = data;
 					$scope.widget.loaded = true;
+					if(options.draggable) {
+						setDraggable(id);
+					}
 				}
 			}, 1000);
 		}
