@@ -2,28 +2,40 @@ var http = require('http');
 
 exports.widgets = function(req, res) {
 	res.send([{
+		id: 'cuic-widget-id-0',
 		title: 'DEFECT DISTRIBUTION',
 		type: 'CHART',
+		options: {},
 		dataUrl: 'defectdistribution'
 	}, {
+		id: 'cuic-widget-id-1',
 		title: 'LINE COVERAGE',
 		type: 'DELTA',
+		options: {},
 		dataUrl: ''
 	}, {
+		id: 'cuic-widget-id-2',
 		title: 'BRANCH COVERAGE',
 		type: 'DELTA',
+		options: {},
 		dataUrl: ''
 	}, {
+		id: 'cuic-widget-id-3',
 		title: 'STATIC VIOLATIONS',
 		type: 'DELTA',
+		options: {},
 		dataUrl: ''
 	}, {
+		id: 'cuic-widget-id-4',
 		title: 'DEFECTS COUNT',
 		type: 'ABSOLUTE',
+		options: {},
 		dataUrl: 'defectcount'
 	}, {
+		id: 'cuic-widget-id-5',
 		title: 'CI BUILD',
 		type: 'MULTISTAT',
+		options: {},
 		dataUrl: 'cibuild'
 	}]);
 };

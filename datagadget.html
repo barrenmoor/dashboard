@@ -1,9 +1,9 @@
 <table class="widget-content-table">
-	<tr ng-if="data.type == 'MULTISTAT'" ng-repeat="point in data.values">
+	<tr ng-if="type == 'MULTISTAT'" ng-repeat="point in data.values">
 		<td class="content-cell data {{$first || $middle ? 'non-last-row' : ''}} {{point.style}}">{{point.value}}</td>
 		<td class="content-cell data-label {{$first || $middle ? 'non-last-row' : ''}}">{{point.label}}</td>
 	</tr>
-	<tr ng-if="data.type == 'ABSOLUTE'">
+	<tr ng-if="type == 'ABSOLUTE'">
 		<td class="content-cell big-data">
 			<span class="{{data.actual < data.threshold ? 'success' : 'error'}}">
 				{{data.actual}}
@@ -12,7 +12,7 @@
 			</span>
 		</td>
 	</tr>
-	<tr ng-if="data.type == 'CHART'" ng-repeat="stat in data.values">
+	<tr ng-if="type == 'CHART'" ng-repeat="stat in data.values">
 		<td class="chart-content-cell chart-data">
 			<div ng-if="stat.value > 0" class="chart-div" style="width: {{stat.perc}}%; background-color: {{stat.color}}">&nbsp;</div>
 		</td>

@@ -67,25 +67,33 @@ angular.module('widgets', [])
 	return {
 		restrict: 'E',
 		transclude: true,
-		scope: {title: '@', dataUrl: '@', type: '@'},
+		scope: {title: '@', dataUrl: '@', type: '@', id: '@'},
 		templateUrl: 'widget.html',
 		replace: true,
 		controller: function ($scope, $element, $http) {
-
-			//console.log($scope.$parent.widgets);
-
 			$scope.widget = {};
 			$scope.widget.loaded = false;
 
 			setTimeout(function() {
 				var dataUrl = $element.attr('dataUrl');
 				var type = $element.attr('type');
+				var id = $element.attr('id');
+
+				var options = {};
+
+				for(var i in $scope.$parent.widgets) {
+					if(id == $scope.$parent.widgets[i].id) {
+						options = $scope.$parent.widgets[i].options;
+						break;
+					}
+				}
+
+				$scope.widget.type = type;
+				$scope.widget.options = options;
 
 				if(dataUrl.length != 0) {
 					$http.get(dataUrl).success(function(data) {
-						data.type = type;
 						$scope.widget.data = data;
-						//console.log(data);
 						$scope.widget.loaded = true;
 					}).error(function() {
 						//TODO: revisit later on
@@ -96,7 +104,6 @@ angular.module('widgets', [])
 				} else {
 					//TODO: remove else case later
 					var data = {};
-					data.type = type;
 					$scope.widget.data = data;
 					$scope.widget.loaded = true;
 				}
@@ -109,7 +116,7 @@ angular.module('widgets', [])
 	return {
 		restrict: 'E',
 		transclude: true,
-		scope: {data: '='},
+		scope: {data: '=', type: '=', options: '='},
 		templateUrl: 'datagadget.html',
 		replace: true
 	};
