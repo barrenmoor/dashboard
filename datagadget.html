@@ -16,7 +16,16 @@
 		<td class="chart-content-cell chart-data">
 			<div ng-if="stat.value > 0" class="chart-div" style="width: {{stat.perc}}%; background-color: {{stat.color}}">&nbsp;</div>
 		</td>
-		<td class="content-cell chart-data">{{stat.value}}</td>
+		<td class="content-cell chart-data-cell chart-data">{{stat.value}}</td>
 		<td class="content-cell data-label">{{stat.label}}</td>
+	</tr>
+	<tr ng-if="type == 'DELTA'">
+		<td class="content-cell delta-data">{{data.value}}<span class="delta-unit-big">{{options.unit}}</span></td>
+	</tr>
+	<tr ng-if="type == 'DELTA'">
+		<td class="content-cell data {{data.better ? 'success' : (data.delta == 0 ? 'warning' : 'error')}}">
+			<span class="delta-glyphicon glyphicon {{data.better ? (options.green == 'up' ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down') : (data.delta == 0 ? 'glyphicon-arrow-right' : (options.green == 'up' ? 'glyphicon-arrow-down' : 'glyphicon-arrow-up'))}}"></span>
+			{{data.delta}}<span class="delta-unit-small {{data.better ? 'success' : (data.delta == 0 ? 'warning' : 'error')}}">{{options.unit}}</span>
+		</td>
 	</tr>
 </table>

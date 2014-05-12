@@ -11,20 +11,20 @@ var dashboardwidgets = [{
 		id: 'cuic-widget-id-1',
 		title: 'LINE COVERAGE',
 		type: 'DELTA',
-		options: {},
-		dataUrl: ''
+		options: {unit: "%", green: "up"},
+		dataUrl: 'linecoverage'
 	}, {
 		id: 'cuic-widget-id-2',
 		title: 'BRANCH COVERAGE',
 		type: 'DELTA',
-		options: {},
-		dataUrl: ''
+		options: {unit: "%", green: "up"},
+		dataUrl: 'branchcoverage'
 	}, {
 		id: 'cuic-widget-id-3',
 		title: 'STATIC VIOLATIONS',
 		type: 'DELTA',
 		options: {green: "down"},
-		dataUrl: ''
+		dataUrl: 'staticviolations'
 	}, {
 		id: 'cuic-widget-id-4',
 		title: 'DEFECTS COUNT',

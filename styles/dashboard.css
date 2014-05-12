@@ -152,9 +152,10 @@ body {
 .chart-content-cell {
 	padding-top: 1px;
 	padding-bottom: 1px;
+	padding-left: 20px;
 	height: 60px;
 
-	width: 70%;
+	width: 65%;
 }
 
 .chart-div {
@@ -168,4 +169,39 @@ body {
 	font-style: normal;
 	color: #FFFFFF;
 	text-align: right;
+}
+
+.chart-data-cell {
+	width: 10%;
+	padding-right: 3px;
+}
+
+.delta-data {
+	font-family: arial;
+	font-size: 60px;
+	font-style: normal;
+	color: #FFFFFF;
+	text-align: right;
+}
+
+.delta-unit-big {
+	font-family: arial;
+	font-size: 30px;
+	font-style: normal;
+	color: #FFFFFF;
+	text-align: right;
+	padding-right: 20px;
+}
+
+.delta-unit-small {
+	font-family: arial;
+	font-size: 18px;
+	font-style: normal;
+	color: #FFFFFF;
+	text-align: right;
+	padding-right: 20px;	
+}
+
+.delta-glyphicon {
+	top: 4px !important;
 }
