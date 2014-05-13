@@ -118,6 +118,9 @@ var ProductManagement = function(product) {
 			},
 			defectcount: {
 				href: "/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
+			},
+			cibuild: {
+				path: "/jenkins/view/UCCX_MAVEN/job/uccx_1051_fcs_ci/lastSuccessfulBuild/testReport/api/json"
 			}
 		},
 
@@ -128,6 +131,9 @@ var ProductManagement = function(product) {
 			},
 			defectcount: {
 				href: "/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
+			},
+			cibuild: {
+				path: "/jenkins/view/CUIC_MAVEN/job/cuic_1051_ci/lastSuccessfulBuild/testReport/api/json"
 			}
 		}
 	};
@@ -147,9 +153,12 @@ exports.widgets = function(req, res) {
 };
 
 exports.cibuild = function(req, res) {
+	var prodManagement = new ProductManagement(req.query.product);
+	var conf = prodManagement.getConf("cibuild");
+
 	var request = http.request({
 		host: 'bgl-ccbu-kabini',
-		path: '/jenkins/view/CUIC_MAVEN/job/cuic_1051_ci/lastSuccessfulBuild/testReport/api/json',
+		path: conf.path,
 		method: 'GET'
 	}, function(response) {
 		var output = '';
