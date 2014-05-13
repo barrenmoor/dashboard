@@ -121,6 +121,12 @@ var ProductManagement = function(product) {
 			},
 			cibuild: {
 				path: "/jenkins/view/UCCX_MAVEN/job/uccx_1051_fcs_ci/lastSuccessfulBuild/testReport/api/json"
+			},
+			linecoverage: {
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/392020"
+			},
+			branchcoverage: {
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/392020"
 			}
 		},
 
@@ -134,6 +140,12 @@ var ProductManagement = function(product) {
 			},
 			cibuild: {
 				path: "/jenkins/view/CUIC_MAVEN/job/cuic_1051_ci/lastSuccessfulBuild/testReport/api/json"
+			},
+			linecoverage: {
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756"
+			},
+			branchcoverage: {
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756"
 			}
 		}
 	};
@@ -273,11 +285,14 @@ exports.defectcount = function(req, res) {
 };
 
 exports.linecoverage = function(req, res) {
+	var prodManagement = new ProductManagement(req.query.product);
+	var conf = prodManagement.getConf("linecoverage");
+
 	var phantom = require('phantom');
 	phantom.create(function(ph) {
 		console.log("opening sonar");
 		return ph.createPage(function(page) {
-			return page.open("http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756", function(status) {
+			return page.open(conf.url, function(status) {
 				console.log("opened sonar? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
@@ -288,7 +303,7 @@ exports.linecoverage = function(req, res) {
 						value: linecoverage
 					};
 				}, function(result) {
-					var util = new DeltaRecordUtil("up", result.value, "linecoverage.txt", 2);
+					var util = new DeltaRecordUtil("up", result.value, conf.product + "-linecoverage.txt", 2);
 					util.recordAndRespond(res);
 
 					ph.exit();
@@ -299,11 +314,14 @@ exports.linecoverage = function(req, res) {
 };
 
 exports.branchcoverage = function(req, res) {
+	var prodManagement = new ProductManagement(req.query.product);
+	var conf = prodManagement.getConf("branchcoverage");
+
 	var phantom = require('phantom');
 	phantom.create(function(ph) {
 		console.log("opening sonar");
 		return ph.createPage(function(page) {
-			return page.open("http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756", function(status) {
+			return page.open(conf.url, function(status) {
 				console.log("opened sonar? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
@@ -314,7 +332,7 @@ exports.branchcoverage = function(req, res) {
 						value: branchcoverage
 					};
 				}, function(result) {
-					var util = new DeltaRecordUtil("up", result.value, "branchcoverage.txt", 2);
+					var util = new DeltaRecordUtil("up", result.value, conf.product + "-branchcoverage.txt", 2);
 					util.recordAndRespond(res);
 
 					ph.exit();
