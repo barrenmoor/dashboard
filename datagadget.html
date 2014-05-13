@@ -8,7 +8,7 @@
 			<span class="{{data.actual < data.threshold ? 'success' : 'error'}}">
 				{{data.actual}}
 				<img ng-if="data.actual < data.threshold" class="absolute-icon-success" src="images/all-good.png">
-				<img ng-if="data.actual > data.threshold" class="absolute-icon-error" src="images/not-so-good.png">
+				<img ng-if="data.actual >= data.threshold" class="absolute-icon-error" src="images/not-so-good.png">
 			</span>
 		</td>
 	</tr>
