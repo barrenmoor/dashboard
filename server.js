@@ -21,5 +21,6 @@ app.get('/dashboard/staticviolations', links.staticviolations);
 app.get('/dashboard/defectdistribution', links.defectdistribution);
 app.get('/dashboard/s1s2defectcount', links.s1s2defectcount);
 app.get('/dashboard/cfdcount', links.cfdcount);
+app.get('/dashboard/olddefectcount', links.olddefectcount);
 
 app.listen(8080);

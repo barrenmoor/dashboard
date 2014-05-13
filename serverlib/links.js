@@ -133,6 +133,9 @@ var ProductManagement = function(product) {
 			},
 			cfdcount: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
+			},
+			olddefectcount: {
+				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
 			}
 		},
 
@@ -157,6 +160,9 @@ var ProductManagement = function(product) {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
 			},
 			cfdcount: {
+				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
+			},
+			olddefectcount: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
 			}
 		}
@@ -411,6 +417,45 @@ exports.s1s2defectcount = function(req, res) {
 					$("table#Severity table.solid_blue_border_full tr td:nth-child(7)").each(function() {
 						var value = parseInt($(this).text().trim());
 						if(value < 3) {
+							count++;
+						}
+					});
+					return {
+						actual: count,
+						threshold: 0
+					};
+				}, function(result) {
+					if(isNaN(result.actual)) {
+						res.status(500).send({
+							error: "Internal Server Error!"
+						});
+					} else {
+						res.send(result);
+					}
+					ph.exit();
+				});
+			});
+		});
+	});
+};
+
+exports.olddefectcount = function(req, res) {
+	var prodManagement = new ProductManagement(req.query.product);
+	var conf = prodManagement.getConf("olddefectcount");
+
+	var phantom = require('phantom');
+	phantom.create(function(ph) {
+		console.log("opening enotify9-1");
+		return ph.createPage(function(page) {
+			return page.open(conf.url, function(status) {
+				console.log("opened enotify9-1? ", status);
+				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
+
+				page.evaluate(function() {
+					var count = 0;
+					$("table#Severity table.solid_blue_border_full tr td:nth-child(11)").each(function() {
+						var value = parseInt($(this).text().trim());
+						if(value > 28) {
 							count++;
 						}
 					});
