@@ -77,12 +77,14 @@ var DeltaRecordUtil = function(green, value, file, precision) {
 
 			if(isNaN(value)) {
 				error();
+				return;
 			}
 
 			if(fs.existsSync(file)) {
 				fs.readFile(file, function(err, data) {
 					if(err) {
 						error();
+						return;
 					} else {
 						var prevResults = getValues(data + "");
 
@@ -91,17 +93,54 @@ var DeltaRecordUtil = function(green, value, file, precision) {
 
 						if(value != prevResults.curr) {
 							fs.writeFile(file, getLine(prevResults.curr, value), success);
+							return;
 						} else {
 							success();
+							return;
 						}
 					}
 				});
 			} else {
 				fs.writeFile(file, getLine(value, value), success);
+				return;
 			}
 		}
 	};
 };
+
+var ProductManagement = function(product) {
+	var product = product ? product : "cuic";
+	var allConf = {
+		uccx: {
+			product: product,
+			staticviolations: {
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/392020"
+			},
+			defectcount: {
+				href: "/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
+			}
+		},
+
+		cuic: {
+			product: product,
+			staticviolations: {
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/503756"
+			},
+			defectcount: {
+				href: "/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
+			}
+		}
+	};
+
+	return {
+		getConf: function(type) {
+			var conf = allConf[product][type];
+			conf.product = allConf[product].product;
+
+			return conf;
+		}
+	};
+}
 
 exports.widgets = function(req, res) {
 	res.send(dashboardwidgets);
@@ -188,6 +227,9 @@ exports.cibuild = function(req, res) {
 
 exports.defectcount = function(req, res) {
 	var phantom = require('phantom');
+	var prodManagement = new ProductManagement(req.query.product);
+	var conf = prodManagement.getConf("defectcount");
+
 	phantom.create(function(ph) {
 		console.log("opening enotify9-1");
 		return ph.createPage(function(page) {
@@ -195,9 +237,9 @@ exports.defectcount = function(req, res) {
 				console.log("opened enotify9-1? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
-				page.evaluate(function() {
-					var outstanding = parseInt($("a[href='/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html']").text());
-					var threshold = parseInt($("a[href='/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html']")
+				page.evaluate(function(conf) {
+					var outstanding = parseInt($("a[href='" + conf.href + "']").text());
+					var threshold = parseInt($("a[href='" + conf.href + "']")
 													.parent().parent().parent().parent()
 													.children(":nth-child(5)")
 													.children("font").text());
@@ -210,12 +252,12 @@ exports.defectcount = function(req, res) {
 					if(isNaN(result.actual) || isNaN(result.threshold)) {
 						res.status(500).send({
 							error: "Internal Server Error!"
-						});						
+						});
 					} else {
 						res.send(result);
 					}
 					ph.exit();
-				});
+				}, conf);
 			});
 		});
 	});
@@ -275,10 +317,13 @@ exports.branchcoverage = function(req, res) {
 
 exports.staticviolations = function(req, res) {
 	var phantom = require('phantom');
+	var prodManagement = new ProductManagement(req.query.product);
+	var conf = prodManagement.getConf("staticviolations");
+
 	phantom.create(function(ph) {
 		console.log("opening sonar");
 		return ph.createPage(function(page) {
-			return page.open("http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/503756", function(status) {
+			return page.open(conf.url, function(status) {
 				console.log("opened sonar? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
@@ -287,7 +332,7 @@ exports.staticviolations = function(req, res) {
 					var spanIds = ["m_blocker_violations", "m_critical_violations", "m_major_violations", "m_minor_violations", "m_info_violations"];
 
 					for(var i = 0; i < spanIds.length; i++) {
-						var val = parseInt($("span#" + spanIds[i]).text());
+						var val = parseInt($("span#" + spanIds[i]).text().replace(",", ""));
 						if(isNaN(val)) {
 							return {
 								value: "Internal Server Error"
@@ -300,7 +345,7 @@ exports.staticviolations = function(req, res) {
 						value: total
 					};
 				}, function(result) {
-					var util = new DeltaRecordUtil("down", result.value, "staticviolations.txt");
+					var util = new DeltaRecordUtil("down", result.value, conf.product + "-staticviolations.txt");
 					util.recordAndRespond(res);
 
 					ph.exit();
