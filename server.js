@@ -19,5 +19,7 @@ app.get('/dashboard/linecoverage', links.linecoverage);
 app.get('/dashboard/branchcoverage', links.branchcoverage);
 app.get('/dashboard/staticviolations', links.staticviolations);
 app.get('/dashboard/defectdistribution', links.defectdistribution);
+app.get('/dashboard/s1s2defectcount', links.s1s2defectcount);
+app.get('/dashboard/cfdcount', links.cfdcount);
 
 app.listen(8080);
