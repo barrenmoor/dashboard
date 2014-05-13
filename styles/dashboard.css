@@ -208,3 +208,10 @@ body {
 .delta-glyphicon {
 	top: 4px !important;
 }
+
+.update-message {
+	text-align: right; 
+	color: #ffffff; 
+	letter-spacing: 2px; 
+	padding-right: 5px;
+}

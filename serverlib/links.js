@@ -3,7 +3,7 @@ var fs = require('fs');
 
 var dashboardwidgets = [{
 		id: 'cuic-widget-id-0',
-		title: 'DEFECT DISTRIBUTION',
+		title: 'CUIC DEFECT DISTRIBUTION',
 		type: 'CHART',
 		options: {draggable: false},
 		dataUrl: 'defectdistribution'

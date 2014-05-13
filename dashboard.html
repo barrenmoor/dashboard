@@ -1,5 +1,8 @@
 <table ng-if="widgets.length != 0">
 	<tr>
+		<td colspan="4" class="update-message">Updating within <span id="remaining-id">{{timerStartValue}}</span></td>
+	</tr>
+	<tr>
 		<td class="widget-container" rowspan="2"><div id="widget0" class="widget">
 			<widget id="{{widgets[0].id}}" ng-if="widgets[0]" title="{{widgets[0].title}}" dataUrl="{{widgets[0].dataUrl}}" type="{{widgets[0].type}}"/>
 		</div></td>

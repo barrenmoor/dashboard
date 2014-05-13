@@ -24,7 +24,7 @@
 	</tr>
 	<tr ng-if="type == 'DELTA'">
 		<td class="content-cell data {{data.better ? 'success' : (data.delta == 0 ? 'warning' : 'error')}}">
-			<span class="delta-glyphicon glyphicon {{data.better ? (options.green == 'up' ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down') : (data.delta == 0 ? 'glyphicon-arrow-right' : (options.green == 'up' ? 'glyphicon-arrow-down' : 'glyphicon-arrow-up'))}}"></span>
+			<span class="delta-glyphicon glyphicon {{data.better ? (options.green == 'up' ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down') : (data.delta == 0 ? 'glyphicon-play' : (options.green == 'up' ? 'glyphicon-arrow-down' : 'glyphicon-arrow-up'))}}"></span>
 			{{data.delta}}<span class="delta-unit-small {{data.better ? 'success' : (data.delta == 0 ? 'warning' : 'error')}}">{{options.unit}}</span>
 		</td>
 	</tr>

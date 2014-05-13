@@ -33,6 +33,9 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 
 		$(document).ready(function() {
 			$(window).on("resize", setDashboardArea);
+			$scope.timerStartValue = "15:00";
+			var refreshUtil = new RefreshUtil(15 * 60);
+			refreshUtil.startTimer();
 		});
 
 		setDashboardArea();

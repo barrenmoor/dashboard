@@ -41,3 +41,38 @@ var DashContentUtil = function() {
 		}
 	};
 };
+
+var RefreshUtil = function(timerStartValue) {
+	var remaining = timerStartValue ? timerStartValue : 900;
+
+	var format = function(val) {
+		var hrs = parseInt(val / 3600);
+		hrs = hrs < 10 ? "0" + hrs : hrs;
+
+		var mins = parseInt((val - (hrs * 3600)) / 60);
+		mins = mins < 10 ? "0" + mins : mins;
+
+		var secs = val - (hrs * 3600) - (mins * 60);
+		secs = secs < 10 ? "0" + secs : secs;
+
+		return (hrs == "00" ? "" : hrs + ":") + mins + ":" + secs;
+	};
+
+	var updateMessage = function() {
+		remaining--;
+
+		$("#remaining-id").text(format(remaining));
+
+		if(remaining > 0) {
+			setTimeout(updateMessage, 1000);
+		} else {
+			location.reload();
+		}
+	};
+
+	return {
+		startTimer: function() {
+			setTimeout(updateMessage, 1000);
+		}
+	};
+};
