@@ -97,7 +97,7 @@ angular.module('widgets', [])
 				$scope.widget.options = options;
 
 				if(dataUrl.length != 0) {
-					$http.get(dataUrl).success(function(data) {
+					$http.get("apicall?url=" + dataUrl).success(function(data) {
 						$scope.widget.data = data;
 						$scope.widget.loaded = true;
 						if(options.draggable) {

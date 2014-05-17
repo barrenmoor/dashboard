@@ -1,44 +1,6 @@
 var http = require('http');
 var fs = require('fs');
 
-var dashboardwidgets = [{
-		id: 'cuic-widget-id-0',
-		title: 'CUIC DEFECT DISTRIBUTION',
-		type: 'CHART',
-		options: {draggable: false},
-		dataUrl: 'defectdistribution'
-	}, {
-		id: 'cuic-widget-id-1',
-		title: 'LINE COVERAGE',
-		type: 'DELTA',
-		options: {unit: "%", green: "up", draggable: true},
-		dataUrl: 'linecoverage'
-	}, {
-		id: 'cuic-widget-id-2',
-		title: 'BRANCH COVERAGE',
-		type: 'DELTA',
-		options: {unit: "%", green: "up", draggable: true},
-		dataUrl: 'branchcoverage'
-	}, {
-		id: 'cuic-widget-id-3',
-		title: 'STATIC VIOLATIONS',
-		type: 'DELTA',
-		options: {green: "down", draggable: true},
-		dataUrl: 'staticviolations'
-	}, {
-		id: 'cuic-widget-id-4',
-		title: 'DEFECTS COUNT',
-		type: 'ABSOLUTE',
-		options: {draggable: true},
-		dataUrl: 'defectcount'
-	}, {
-		id: 'cuic-widget-id-5',
-		title: 'CI BUILD',
-		type: 'MULTISTAT',
-		options: {draggable: true},
-		dataUrl: 'cibuild'
-	}];
-
 var DeltaRecordUtil = function(green, value, file, precision) {
 	var response;
 	var delta = 0;
@@ -177,10 +139,6 @@ var ProductManagement = function(product) {
 		}
 	};
 }
-
-exports.widgets = function(req, res) {
-	res.send(dashboardwidgets);
-};
 
 exports.cibuild = function(req, res) {
 	var prodManagement = new ProductManagement(req.query.product);
