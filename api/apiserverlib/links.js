@@ -90,13 +90,7 @@ var ProductManagement = function(product) {
 			branchcoverage: {
 				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/392020"
 			},
-			s1s2defectcount: {
-				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
-			},
-			cfdcount: {
-				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
-			},
-			olddefectcount: {
+			defectstatistics: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
 			}
 		},
@@ -118,13 +112,7 @@ var ProductManagement = function(product) {
 			branchcoverage: {
 				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756"
 			},
-			s1s2defectcount: {
-				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
-			},
-			cfdcount: {
-				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
-			},
-			olddefectcount: {
+			defectstatistics: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
 			}
 		}
@@ -203,11 +191,7 @@ exports.cibuild = function(req, res) {
         		}, {
         			label: "Failed Tests",
         			value: json.failCount,
-        			style: 'error'
-        		}, {
-        			label: "Skipped Tests",
-        			value: json.skipCount,
-        			style: 'warning'
+        			style: json.failCount > 0 ? 'error' : ''
         		}, {
         			label: "Longest Running Test",
         			value: format(Number(longestRunning).toFixed(0))
@@ -358,9 +342,9 @@ exports.staticviolations = function(req, res) {
 	});
 };
 
-exports.s1s2defectcount = function(req, res) {
+exports.defectstatistics = function(req, res) {
 	var prodManagement = new ProductManagement(req.query.product);
-	var conf = prodManagement.getConf("s1s2defectcount");
+	var conf = prodManagement.getConf("defectstatistics");
 
 	var phantom = require('phantom');
 	phantom.create(function(ph) {
@@ -371,103 +355,47 @@ exports.s1s2defectcount = function(req, res) {
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
 				page.evaluate(function() {
-					var count = 0;
-					$("table#Severity table.solid_blue_border_full tr td:nth-child(7)").each(function() {
-						var value = parseInt($(this).text().trim());
-						if(value < 3) {
-							count++;
-						}
-					});
-					return {
-						actual: count,
-						threshold: 0
-					};
-				}, function(result) {
-					if(isNaN(result.actual)) {
-						res.status(500).send({
-							error: "Internal Server Error!"
-						});
-					} else {
-						res.send(result);
-					}
-					ph.exit();
-				});
-			});
-		});
-	});
-};
-
-exports.olddefectcount = function(req, res) {
-	var prodManagement = new ProductManagement(req.query.product);
-	var conf = prodManagement.getConf("olddefectcount");
-
-	var phantom = require('phantom');
-	phantom.create(function(ph) {
-		console.log("opening enotify9-1");
-		return ph.createPage(function(page) {
-			return page.open(conf.url, function(status) {
-				console.log("opened enotify9-1? ", status);
-				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
-
-				page.evaluate(function() {
-					var count = 0;
-					$("table#Severity table.solid_blue_border_full tr td:nth-child(11)").each(function() {
-						var value = parseInt($(this).text().trim());
-						if(value > 28) {
-							count++;
-						}
-					});
-					return {
-						actual: count,
-						threshold: 0
-					};
-				}, function(result) {
-					if(isNaN(result.actual)) {
-						res.status(500).send({
-							error: "Internal Server Error!"
-						});
-					} else {
-						res.send(result);
-					}
-					ph.exit();
-				});
-			});
-		});
-	});
-};
-
-exports.cfdcount = function(req, res) {
-	var prodManagement = new ProductManagement(req.query.product);
-	var conf = prodManagement.getConf("cfdcount");
-
-	var phantom = require('phantom');
-	phantom.create(function(ph) {
-		console.log("opening enotify9-1");
-		return ph.createPage(function(page) {
-			return page.open(conf.url, function(status) {
-				console.log("opened enotify9-1? ", status);
-				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
-
-				page.evaluate(function() {
-					var count = 0;
+					var cfdcount = 0;
 					$("table#Severity table.solid_blue_border_full tr td:nth-child(17)").each(function() {
 						var value = $(this).text().trim();
 						if(value == "customer-use") {
-							count++;
+							cfdcount++;
 						}
 					});
-					return {
-						actual: count,
-						threshold: 0
-					};
+
+					var olddefectcount = 0;
+					$("table#Severity table.solid_blue_border_full tr td:nth-child(11)").each(function() {
+						var value = parseInt($(this).text().trim());
+						if(value > 28) {
+							olddefectcount++;
+						}
+					});
+
+					var s1s2defectcount = 0;
+					$("table#Severity table.solid_blue_border_full tr td:nth-child(7)").each(function() {
+						var value = parseInt($(this).text().trim());
+						if(value < 3) {
+							s1s2defectcount++;
+						}
+					});
+
+		        	return {
+		        		values : [{
+		        			label: "Customer Found Defects",
+		        			value: cfdcount,
+		        			style: cfdcount > 0 ? 'error' : 'success'
+		        		}, {
+		        			label: "> 28 Days Defects",
+		        			value: olddefectcount,
+		        			style: olddefectcount > 0 ? 'error' : 'success'
+		        		}, {
+		        			label: "S1-S2 Defects",
+		        			value: s1s2defectcount,
+		        			style: s1s2defectcount > 0 ? 'error' : 'success'
+		        		}]
+		        	};
 				}, function(result) {
-					if(isNaN(result.actual)) {
-						res.status(500).send({
-							error: "Internal Server Error!"
-						});
-					} else {
-						res.send(result);
-					}
+					res.send(result);
 					ph.exit();
 				});
 			});

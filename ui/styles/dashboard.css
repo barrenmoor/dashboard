@@ -66,7 +66,7 @@ body {
 .widget-content {
 	background-color: #333333;
 
-	padding-left: 2px;
+	padding-left: 6px;
 	padding-top: 2px;
 	padding-right: 2px;
 	padding-bottom: 2px;
@@ -100,19 +100,28 @@ body {
 	font-family: arial;
 	font-size: 12px;
 	font-style: normal;
-	color: #FFFFFF;
+	color: #ABABAB;
 	text-align: left;
-	padding-left: 10px;
+	padding-left: 30px;
 }
 
 .non-last-row {
 	border-bottom: solid 2px;
-	border-color: #ABABAB;
+	border-color: #787878;
 }
 
 .content-cell {
 	padding-top: 8px;
 	padding-bottom: 8px;
+}
+
+.multistat-content-cell {
+	padding-top: 2px;
+	padding-bottom: 2px;
+}
+
+.multistat-datalabel-cell {
+	width: 65%;
 }
 
 .success {
@@ -127,19 +136,10 @@ body {
 	color: #FFFF00 !important;
 }
 
-.big-data {
-	font-family: arial;
-	font-size: 80px;
-	font-style: normal;
-	color: #FFFFFF;
-	text-align: left;
-	padding-left: 10px;	
-}
-
 .absolute-icon-success {
 	position: absolute;
 	top: 20px;
-	left: 50px;
+	left: 20px;
 	display: inline;
 	overflow: hidden;
 }
@@ -147,7 +147,7 @@ body {
 .absolute-icon-error {
 	position: absolute;
 	top: 30px;
-	left: 80px;
+	left: 20px;
 	display: inline;
 	overflow: hidden;
 }
@@ -214,4 +214,26 @@ body {
 	color: #ffffff; 
 	letter-spacing: 2px; 
 	padding-right: 5px;
+}
+
+.error-cell {
+	padding-top: 20px;
+	text-align: left;
+}
+
+.loading-failed {
+	font-family: arial;
+	font-size: 16px;
+	font-style: normal;
+	color: #ABABAB;
+	padding-left: 10px;
+}
+
+.error-link {
+	font-family: arial;
+	font-size: 16px;
+	font-style: normal;
+	color: #DEDEDE;
+	padding-left: 10px;
+	cursor: pointer;
 }

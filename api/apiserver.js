@@ -17,8 +17,6 @@ app.get('/metrics/linecoverage', links.linecoverage);
 app.get('/metrics/branchcoverage', links.branchcoverage);
 app.get('/metrics/staticviolations', links.staticviolations);
 app.get('/metrics/defectdistribution', links.defectdistribution);
-app.get('/metrics/s1s2defectcount', links.s1s2defectcount);
-app.get('/metrics/cfdcount', links.cfdcount);
-app.get('/metrics/olddefectcount', links.olddefectcount);
+app.get('/metrics/defectstatistics', links.defectstatistics);
 
 app.listen(8082);

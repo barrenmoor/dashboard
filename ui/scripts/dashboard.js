@@ -32,9 +32,7 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 		};
 
 		$(document).ready(function() {
-			$(window).on("resize", setDashboardArea);
-			$scope.timerStartValue = "15:00";
-			var refreshUtil = new RefreshUtil(15 * 60);
+			var refreshUtil = new RefreshUtil(30 * 60);
 			refreshUtil.startTimer();
 		});
 
@@ -46,8 +44,10 @@ var setDraggable = function(id) {
 	$("#" + id).parent().draggable({
 		revert: true,
 		opacity: 0.7,
-		zIndex: 100
+		zIndex: 1
 	});
+
+	$("#" + id).parent().addClass("widget-draggable");
 
 	$("#" + id).parent().droppable({
 		hoverClass: 'droppable-hover',
@@ -104,22 +104,20 @@ angular.module('widgets', [])
 							setDraggable(id);
 						}
 					}).error(function() {
-						//TODO: revisit later on
-						//how do we refresh a gadget?
-						$scope.widget.data = {};
+						$scope.widget.type = 'ERROR';
+						$scope.widget.data = {
+							id: id,
+							details: "Error loading data from URL: " + dataUrl
+						};
 						$scope.widget.loaded = true;
-						if(options.draggable) {
-							setDraggable(id);
-						}
 					});
 				} else {
-					//TODO: remove else case later
-					var data = {};
-					$scope.widget.data = data;
+					$scope.widget.type = 'ERROR';
+					$scope.widget.data = {
+						id: id,
+						details: "No data URL specified for this widget."
+					};
 					$scope.widget.loaded = true;
-					if(options.draggable) {
-						setDraggable(id);
-					}
 				}
 			}, 1000);
 		}

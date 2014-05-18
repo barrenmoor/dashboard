@@ -1,15 +1,15 @@
 <table class="widget-content-table">
 	<tr ng-if="type == 'MULTISTAT'" ng-repeat="point in data.values">
-		<td class="content-cell data {{$first || $middle ? 'non-last-row' : ''}} {{point.style}}">{{point.value}}</td>
-		<td class="content-cell data-label {{$first || $middle ? 'non-last-row' : ''}}">{{point.label}}</td>
+		<td class="multistat-content-cell data {{$first || $middle ? 'non-last-row' : ''}} {{point.style}}">{{point.value}}</td>
+		<td class="multistat-content-cell multistat-datalabel-cell data-label {{$first || $middle ? 'non-last-row' : ''}}">{{point.label}}</td>
 	</tr>
 	<tr ng-if="type == 'ABSOLUTE'">
-		<td class="content-cell big-data">
+		<td class="content-cell data">
 			<span class="{{data.actual < data.threshold ? 'success' : 'error'}}">
 				{{data.actual}}
-				<img ng-if="data.actual < data.threshold" class="absolute-icon-success" src="images/all-good.png">
-				<img ng-if="data.actual >= data.threshold" class="absolute-icon-error" src="images/not-so-good.png">
 			</span>
+			<img ng-if="data.actual < data.threshold" class="absolute-icon-success" src="images/all-good-2.png">
+			<img ng-if="data.actual >= data.threshold" class="absolute-icon-error" src="images/not-so-good-2.png">			
 		</td>
 	</tr>
 	<tr ng-if="type == 'CHART'" ng-repeat="stat in data.values">
@@ -26,6 +26,29 @@
 		<td class="content-cell data {{data.better ? 'success' : (data.delta == 0 ? 'warning' : 'error')}}">
 			<span class="delta-glyphicon glyphicon {{data.better ? (options.green == 'up' ? 'glyphicon-arrow-up' : 'glyphicon-arrow-down') : (data.delta == 0 ? 'glyphicon-play' : (options.green == 'up' ? 'glyphicon-arrow-down' : 'glyphicon-arrow-up'))}}"></span>
 			{{data.delta}}<span class="delta-unit-small {{data.better ? 'success' : (data.delta == 0 ? 'warning' : 'error')}}">{{options.unit}}</span>
+		</td>
+	</tr>
+	<tr ng-if="type == 'ERROR'">
+		<td class="error-cell">
+			<span class="loading-failed">Loading Failed.</span>
+			<br>
+			<a class="error-link" data-toggle="modal" data-target="#error-{{data.id}}">Click here to see the error</a><br>
+			<div class="modal fade" id="error-{{data.id}}" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+			  <div class="modal-dialog">
+			    <div class="modal-content">
+			      <div class="modal-header">
+			        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+			        <h4 class="modal-title" id="errorModalLabel">Error Loading Widget</h4>
+			      </div>
+			      <div class="modal-body">
+			        {{data.details}}
+			      </div>
+			      <div class="modal-footer">
+			        <button type="button" class="btn btn-warning" data-dismiss="modal">Close</button>
+			      </div>
+			    </div>
+			  </div>
+			</div>
 		</td>
 	</tr>
 </table>

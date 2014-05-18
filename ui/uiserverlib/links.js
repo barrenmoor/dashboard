@@ -8,16 +8,16 @@ var dashboardwidgets = [{
 		dataUrl: 'http://localhost:8082/metrics/defectdistribution'
 	}, {
 		id: 'cuic-widget-id-1',
-		title: 'LINE COVERAGE',
-		type: 'DELTA',
-		options: {unit: "%", green: "up", draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/linecoverage'
+		title: 'DEFECTS COUNT',
+		type: 'ABSOLUTE',
+		options: {draggable: true},
+		dataUrl: 'http://localhost:8082/metrics/defectcount'
 	}, {
 		id: 'cuic-widget-id-2',
-		title: 'BRANCH COVERAGE',
-		type: 'DELTA',
-		options: {unit: "%", green: "up", draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/branchcoverage'
+		title: 'DEFECT STATISTICS',
+		type: 'MULTISTAT',
+		options: {draggable: true},
+		dataUrl: 'http://localhost:8082/metrics/defectstatistics'
 	}, {
 		id: 'cuic-widget-id-3',
 		title: 'STATIC VIOLATIONS',
@@ -26,16 +26,16 @@ var dashboardwidgets = [{
 		dataUrl: 'http://localhost:8082/metrics/staticviolations'
 	}, {
 		id: 'cuic-widget-id-4',
-		title: 'DEFECTS COUNT',
-		type: 'ABSOLUTE',
-		options: {draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/defectcount'
-	}, {
-		id: 'cuic-widget-id-5',
 		title: 'CI BUILD',
 		type: 'MULTISTAT',
 		options: {draggable: true},
 		dataUrl: 'http://localhost:8082/metrics/cibuild'
+	}, {
+		id: 'cuic-widget-id-5',
+		title: 'CODE COVERAGE',
+		type: 'DELTA',
+		options: {unit: "%", green: "up", draggable: true},
+		dataUrl: 'http://localhost:8082/metrics/linecoverage'
 	}];
 
 exports.widgets = function(req, res) {
@@ -47,18 +47,19 @@ exports.apicall = function(req, res) {
 	var output = "";
 
 	http.get(url, function(apiresponse) {
-		console.log(apiresponse.statusCode);
-
-		apiresponse.on('data', function(chunk) {
-			output += chunk;
-		}).on('end', function() {
-			var json = JSON.parse(output);
-			res.send(json);
-		});
-	}).on('error', function(e) {
-		console.log("Error: " + url + ": " + e.message);
-		res.status(500).send({
-			error: "Internal Server Error!"
-		});
+		if(apiresponse.statusCode != 200) {
+			console.log("Error: " + url + ": " + apiresponse.statusCode);
+			res.status(500).send({
+				apiStatus: apiresponse.statusCode,
+				error: "Internal Server Error!"
+			});
+		} else {
+			apiresponse.on('data', function(chunk) {
+				output += chunk;
+			}).on('end', function() {
+				var json = JSON.parse(output);
+				res.send(json);
+			});
+		}
 	});
 };

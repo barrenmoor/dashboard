@@ -1,9 +1,9 @@
 var DashContentUtil = function() {
-	var MIN_HEIGHT = 850;
+	var MIN_HEIGHT = 650;
 	var MIN_WIDTH = 1450;
 
-	var HEIGHT_PADDING = 60;
-	var WIDTH_PADDING = 250;
+	// var HEIGHT_PADDING = 60;
+	// var WIDTH_PADDING = 250;
 
 	var layoutManagers = {
 		"DOUBLE_HEIGHT" : {
@@ -24,11 +24,14 @@ var DashContentUtil = function() {
 
 	return {
 		getDashboardSize : function() {
-			var windowHeight = $(window).height();
-			var windowWidth = $(window).width();
+			// var windowHeight = $(window).height();
+			// var windowWidth = $(window).width();
 
-			var height = (windowHeight - HEIGHT_PADDING) > MIN_HEIGHT ? (windowHeight - HEIGHT_PADDING) : MIN_HEIGHT;
-			var width = (windowWidth - WIDTH_PADDING) > MIN_WIDTH ? (windowWidth - WIDTH_PADDING) : MIN_WIDTH;			
+			// var height = (windowHeight - HEIGHT_PADDING) > MIN_HEIGHT ? (windowHeight - HEIGHT_PADDING) : MIN_HEIGHT;
+			// var width = (windowWidth - WIDTH_PADDING) > MIN_WIDTH ? (windowWidth - WIDTH_PADDING) : MIN_WIDTH;			
+
+			var height = MIN_HEIGHT;
+			var width = MIN_WIDTH;
 			
 			return {
 				height : height,
@@ -59,9 +62,8 @@ var RefreshUtil = function(timerStartValue) {
 	};
 
 	var updateMessage = function() {
-		remaining--;
-
 		$("#remaining-id").text(format(remaining));
+		remaining--;
 
 		if(remaining > 0) {
 			setTimeout(updateMessage, 1000);
@@ -72,7 +74,7 @@ var RefreshUtil = function(timerStartValue) {
 
 	return {
 		startTimer: function() {
-			setTimeout(updateMessage, 1000);
+			updateMessage();
 		}
 	};
 };
