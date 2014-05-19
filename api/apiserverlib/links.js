@@ -92,6 +92,28 @@ var ProductManagement = function(product) {
 			},
 			defectstatistics: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
+			},
+			defectdistribution: {
+				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html",
+				teams: [{
+					team: "Sparkles / Kaizen",
+					members: ["sgowlika", "npasbola", "archinna", "anukuma3", "srikasri", "ashwmeno", "kavyvish", "azekhan", "raputta", "jramagir", "asingh6", "aditysin", "mamysore", "umshastr"]
+				},{
+					team: "Miracles / Crusaders",
+					members: ["sashivra", "ragtk", "aharinat", "sdeviamm", "ansagar", "gisrikan", "kirachan", "supaturu", "mukuljai", "dchimata", "vdheenad", "rajkanda", "neeljain", "raarasu"]
+				},{
+					team: "Falcons",
+					members: ["jyjoshi", "amarkum", "ckunjumo", "abhigup3", "chindcha", "satkadam", "nejm"]
+				},{
+					team: "DayDreamers / Mafia",
+					members: ["vishashe", "amagniho", "usantra", "prukey", "anurjain", "jaslekau", "namahesh", "ravkota", "parmj", "ranjchan", "sandibha", "ssaikia"]
+				},{
+					team: "Yappers / Mavericks",
+					members: ["mshet", "gopks", "jayas", "sharim", "jpannikk", "shivagar", "isdas", "praveesi", "fariff", "manabr", "mokathir", "shailesi"]
+				},{
+					team: "Smart / Garuda",
+					members: ["smahesh", "racray", "jyos", "sabhiram", "bdoraisa", "sdandu", "rvj", "velanka", "gosivaku", "bhanprak"]
+				}]
 			}
 		},
 
@@ -114,6 +136,28 @@ var ProductManagement = function(product) {
 			},
 			defectstatistics: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
+			},
+			defectdistribution: {
+				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html",
+				teams: [{
+					team: "Evoque",
+					members: ["asrambik", "rottayil", "vandatho", "vgahoi"]
+				}, {
+					team: "Snipers",
+					members: ["serrabel", "mevelu", "pperiasa", "rmurugan", "ycb"]
+				}, {
+					team: "Vipers",
+					members: ["srevunur", "ssonnad", "visgiri", "rajagkri"]
+				}, {
+					team: "Range Rover",
+					members: ["agartia", "cthadika", "sasivana", "shailjas", "vesane"]
+				}, {
+					team: "Hummer",
+					members: ["dihegde", "karajase", "mandhing", "shidas", "sobenny"]
+				}, {
+					team: "Documentation",
+					members: ["jnishant"]
+				}]
 			}
 		}
 	};
@@ -404,26 +448,11 @@ exports.defectstatistics = function(req, res) {
 };
 
 exports.defectdistribution = function(req, res) {
+	var prodManagement = new ProductManagement(req.query.product);
+	var conf = prodManagement.getConf("defectdistribution");
+
 	var DefectDistributionCalc = function() {
-		var teams = [{
-			team: "Evoque",
-			members: ["asrambik", "rottayil", "vandatho", "vgahoi"]
-		}, {
-			team: "Snipers",
-			members: ["serrabel", "mevelu", "pperiasa", "rmurugan", "ycb"]
-		}, {
-			team: "Vipers",
-			members: ["srevunur", "ssonnad", "visgiri", "rajagkri"]
-		}, {
-			team: "Range Rover",
-			members: ["agartia", "cthadika", "sasivana", "shailjas", "vesane"]
-		}, {
-			team: "Hummer",
-			members: ["dihegde", "karajase", "mandhing", "shidas", "sobenny"]
-		}, {
-			team: "Documentation",
-			members: ["jnishant"]
-		}];
+		var teams = conf.teams;
 
 		var series = [{
 			label: "Others",
@@ -517,7 +546,7 @@ exports.defectdistribution = function(req, res) {
 	phantom.create(function(ph) {
 		console.log("opening enotify9-1");
 		return ph.createPage(function(page) {
-			return page.open("http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html", function(status) {
+			return page.open(conf.url, function(status) {
 				console.log("opened enotify9-1? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 

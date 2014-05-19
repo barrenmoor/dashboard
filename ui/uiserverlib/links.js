@@ -5,37 +5,37 @@ var dashboardwidgets = [{
 		title: 'CUIC DEFECT DISTRIBUTION',
 		type: 'CHART',
 		options: {draggable: false},
-		dataUrl: 'http://localhost:8082/metrics/defectdistribution'
+		dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=uccx'
 	}, {
 		id: 'cuic-widget-id-1',
 		title: 'DEFECTS COUNT',
 		type: 'ABSOLUTE',
 		options: {draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/defectcount'
+		dataUrl: 'http://localhost:8082/metrics/defectcount?product=uccx'
 	}, {
 		id: 'cuic-widget-id-2',
 		title: 'DEFECT STATISTICS',
 		type: 'MULTISTAT',
 		options: {draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/defectstatistics'
+		dataUrl: 'http://localhost:8082/metrics/defectstatistics?product=uccx'
 	}, {
 		id: 'cuic-widget-id-3',
 		title: 'STATIC VIOLATIONS',
 		type: 'DELTA',
 		options: {green: "down", draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/staticviolations'
+		dataUrl: 'http://localhost:8082/metrics/staticviolations?product=uccx'
 	}, {
 		id: 'cuic-widget-id-4',
 		title: 'CI BUILD',
 		type: 'MULTISTAT',
 		options: {draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/cibuild'
+		dataUrl: 'http://localhost:8082/metrics/cibuild?product=uccx'
 	}, {
 		id: 'cuic-widget-id-5',
 		title: 'CODE COVERAGE',
 		type: 'DELTA',
 		options: {unit: "%", green: "up", draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/linecoverage'
+		dataUrl: 'http://localhost:8082/metrics/linecoverage?product=uccx'
 	}];
 
 exports.widgets = function(req, res) {
