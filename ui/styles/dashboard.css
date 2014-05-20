@@ -4,6 +4,9 @@ body {
 
 	padding-top: 20px;
 	padding-bottom: 20px;
+}
+
+.dashboard-body-bg {
 	background-color: #121212;
 }
 
@@ -236,4 +239,16 @@ body {
 	color: #DEDEDE;
 	padding-left: 10px;
 	cursor: pointer;
+}
+
+.dashboard-index-cell {
+	width: 40px;
+}
+
+.dashboard-title-cell {
+	width: 500px;
+}
+
+.text-contrast {
+	color: #CDCDCD;
 }

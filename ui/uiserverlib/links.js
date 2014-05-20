@@ -1,51 +1,103 @@
 var http = require('http');
 
-var dashboardwidgets = [{
-		id: 'cuic-widget-id-0',
-		title: 'UCCX DEFECT DISTRIBUTION',
-		type: 'CHART',
-		options: {draggable: false},
-		dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=uccx'
-	}, {
-		id: 'cuic-widget-id-1',
-		title: 'DEFECTS COUNT',
-		type: 'ABSOLUTE',
-		options: {draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/defectcount?product=uccx'
-	}, {
-		id: 'cuic-widget-id-2',
-		title: 'DEFECT STATISTICS',
-		type: 'MULTISTAT',
-		options: {draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/defectstatistics?product=uccx'
-	}, {
-		id: 'cuic-widget-id-3',
-		title: 'STATIC VIOLATIONS',
-		type: 'DELTA',
-		options: {green: "down", draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/staticviolations?product=uccx'
-	}, {
-		id: 'cuic-widget-id-4',
-		title: 'CI BUILD',
-		type: 'MULTISTAT',
-		options: {draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/cibuild?product=uccx'
-	}, {
-		id: 'cuic-widget-id-5',
-		title: 'CODE COVERAGE',
-		type: 'DELTA',
-		options: {unit: "%", green: "up", draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/linecoverage?product=uccx'
-	}, {
-		id: 'cuic-widget-id-6',
-		title: 'LOAD & AUTOMATION',
-		type: 'MULTISTAT',
-		options: {draggable: true},
-		dataUrl: 'http://localhost:8082/metrics/teststatistics?product=uccx'
-	}];
+var dashboards = [{
+	id: "dashboard-0",
+	title: "UCCX Risk to Ship"
+},{
+	id: "dashboard-1",
+	title: "CUIC Risk to Ship"
+}];
+
+var dashboardwidgets = {
+		"dashboard-0": [{
+			id: 'uccx-widget-id-0',
+			title: 'UCCX DEFECT DISTRIBUTION',
+			type: 'CHART',
+			options: {draggable: false},
+			dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=uccx'
+		}, {
+			id: 'uccx-widget-id-1',
+			title: 'DEFECTS COUNT',
+			type: 'ABSOLUTE',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/defectcount?product=uccx'
+		}, {
+			id: 'uccx-widget-id-2',
+			title: 'DEFECT STATISTICS',
+			type: 'MULTISTAT',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/defectstatistics?product=uccx'
+		}, {
+			id: 'uccx-widget-id-3',
+			title: 'STATIC VIOLATIONS',
+			type: 'DELTA',
+			options: {green: "down", draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/staticviolations?product=uccx'
+		}, {
+			id: 'uccx-widget-id-4',
+			title: 'CI BUILD',
+			type: 'MULTISTAT',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/cibuild?product=uccx'
+		}, {
+			id: 'uccx-widget-id-5',
+			title: 'CODE COVERAGE',
+			type: 'DELTA',
+			options: {unit: "%", green: "up", draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/linecoverage?product=uccx'
+		}, {
+			id: 'uccx-widget-id-6',
+			title: 'LOAD & AUTOMATION',
+			type: 'MULTISTAT',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/teststatistics?product=uccx'
+		}],
+		"dashboard-1": [{
+			id: 'cuic-widget-id-0',
+			title: 'CUIC DEFECT DISTRIBUTION',
+			type: 'CHART',
+			options: {draggable: false},
+			dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=cuic'
+		}, {
+			id: 'cuic-widget-id-1',
+			title: 'DEFECTS COUNT',
+			type: 'ABSOLUTE',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/defectcount?product=cuic'
+		}, {
+			id: 'cuic-widget-id-2',
+			title: 'DEFECT STATISTICS',
+			type: 'MULTISTAT',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/defectstatistics?product=cuic'
+		}, {
+			id: 'cuic-widget-id-3',
+			title: 'STATIC VIOLATIONS',
+			type: 'DELTA',
+			options: {green: "down", draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/staticviolations?product=cuic'
+		}, {
+			id: 'cuic-widget-id-4',
+			title: 'CI BUILD',
+			type: 'MULTISTAT',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/cibuild?product=cuic'
+		}, {
+			id: 'cuic-widget-id-5',
+			title: 'CODE COVERAGE',
+			type: 'DELTA',
+			options: {unit: "%", green: "up", draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/linecoverage?product=cuic'
+		}]
+	};
+
+exports.dashboards = function(req, res) {
+	res.send(dashboards);
+};
 
 exports.widgets = function(req, res) {
-	res.send(dashboardwidgets);
+	var responseData = dashboardwidgets[req.params.dashboardId];
+	res.send(responseData ? responseData : []);
 };
 
 exports.apicall = function(req, res) {

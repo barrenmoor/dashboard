@@ -4,12 +4,26 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 	$routeProvider
 		.when('/', {
 			controller : 'MainCtrl',
-			templateUrl : 'dashboard.html'
+			templateUrl : 'main.html'
+		})
+		.when('/:dashboardId', {
+			controller: 'DashboardCtrl',
+			templateUrl: 'dashboard.html'
 		});
 })
 
-.controller('MainCtrl', function($scope, $http) {	
-	$http.get('widgets').success(function(widgetData) {
+.controller('MainCtrl', function($scope, $http) {
+	$("body").removeClass("dashboard-body-bg");
+	$http.get('dashboards').success(function(dashboards) {
+		$scope.dashboards = dashboards;
+	})
+	.error(function(){
+		//handle this
+	});
+})
+
+.controller('DashboardCtrl', function($scope, $http, $routeParams) {	
+	$http.get($routeParams.dashboardId + '/widgets').success(function(widgetData) {
 		$scope.widgets = widgetData;
 
 		var setDashboardArea = function() {
@@ -29,6 +43,7 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 					$("#widget" + i).width(widgetSize.width);
 				}
 			}
+			$("body").addClass("dashboard-body-bg");
 		};
 
 		$(document).ready(function() {
@@ -37,6 +52,9 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 		});
 
 		setDashboardArea();
+	})
+	.error(function() {
+		//handle this
 	});
 });
 

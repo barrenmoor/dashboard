@@ -13,7 +13,8 @@ app.use(function(req, res, next){
 });
 
 app.use('/dashboard', express.static(__dirname));
-app.get('/dashboard/widgets', links.widgets);
+app.get('/dashboard/:dashboardId/widgets', links.widgets);
 app.get('/dashboard/apicall', links.apicall);
+app.get('/dashboard/dashboards', links.dashboards);
 
 app.listen(8080);
