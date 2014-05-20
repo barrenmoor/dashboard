@@ -2,7 +2,7 @@ var http = require('http');
 
 var dashboardwidgets = [{
 		id: 'cuic-widget-id-0',
-		title: 'CUIC DEFECT DISTRIBUTION',
+		title: 'UCCX DEFECT DISTRIBUTION',
 		type: 'CHART',
 		options: {draggable: false},
 		dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=uccx'
@@ -36,6 +36,12 @@ var dashboardwidgets = [{
 		type: 'DELTA',
 		options: {unit: "%", green: "up", draggable: true},
 		dataUrl: 'http://localhost:8082/metrics/linecoverage?product=uccx'
+	}, {
+		id: 'cuic-widget-id-6',
+		title: 'LOAD & AUTOMATION',
+		type: 'MULTISTAT',
+		options: {draggable: true},
+		dataUrl: 'http://localhost:8082/metrics/teststatistics?product=uccx'
 	}];
 
 exports.widgets = function(req, res) {
@@ -61,5 +67,12 @@ exports.apicall = function(req, res) {
 				res.send(json);
 			});
 		}
+	}).on('error', function(e) {
+		console.log("Error: " + url);
+		console.log(e);
+		res.status(500).send({
+			apiStatus: -1,
+			error: "Internal Server Error!"
+		});		
 	});
 };

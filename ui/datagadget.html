@@ -1,6 +1,6 @@
 <table class="widget-content-table">
 	<tr ng-if="type == 'MULTISTAT'" ng-repeat="point in data.values">
-		<td class="multistat-content-cell data {{$first || $middle ? 'non-last-row' : ''}} {{point.style}}">{{point.value}}</td>
+		<td class="multistat-content-cell data {{$first || $middle ? 'non-last-row' : ''}} {{point.style}}">{{point.value}}<span ng-if="point.unit && point.unit.length > 0" class="delta-unit-small {{point.style}}">{{point.unit}}</span></td>
 		<td class="multistat-content-cell multistat-datalabel-cell data-label {{$first || $middle ? 'non-last-row' : ''}}">{{point.label}}</td>
 	</tr>
 	<tr ng-if="type == 'ABSOLUTE'">

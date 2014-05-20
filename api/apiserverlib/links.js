@@ -114,6 +114,9 @@ var ProductManagement = function(product) {
 					team: "Smart / Garuda",
 					members: ["smahesh", "racray", "jyos", "sabhiram", "bdoraisa", "sdandu", "rvj", "velanka", "gosivaku", "bhanprak"]
 				}]
+			},
+			teststatistics: {
+				file: "uccx-tests.txt"
 			}
 		},
 
@@ -158,6 +161,9 @@ var ProductManagement = function(product) {
 					team: "Documentation",
 					members: ["jnishant"]
 				}]
+			},
+			teststatistics: {
+				file: "cuic-tests.txt"
 			}
 		}
 	};
@@ -570,4 +576,57 @@ exports.defectdistribution = function(req, res) {
 			});
 		});
 	});
+};
+
+exports.teststatistics = function(req, res) {
+	var prodManagement = new ProductManagement(req.query.product);
+	var conf = prodManagement.getConf("teststatistics");
+
+	var getStats = function(str) {
+		var stats = {
+			values: []
+		};
+
+		if(!str) {
+			return stats;
+		}
+
+		var lines = str.split("\n");
+		for(var i = 0; i < lines.length; i++) {
+			if(lines[i] && lines[i].trim().length > 0) {
+				var parts = lines[i].split(",");
+				var value = {};
+				var threshold, unit;
+				for(var j = 0; j < parts.length; j++) {
+					if(j == 0) {
+						value.label = parts[j].trim().length == 0 ? "No Title" : parts[j].trim();
+					} else if(j == 1) {
+						threshold = parseFloat(parts[j].trim());
+					} else if(j == 2) {
+						unit = parts[j].trim();
+						value.unit = unit;
+					} else if(j == 3 && !isNaN(parseFloat(parts[j].replace("%")))) {
+						value.value = Number(parseFloat(parts[j].replace("%"))).toFixed(2);
+						value.style = value.value < threshold ? 'error' : 'success';
+					}
+				}
+				if(value.label.length > 0) {
+					stats.values.push(value);
+				}
+			}
+		}
+
+		return stats;
+	}
+
+	if(fs.existsSync(conf.file)) {
+		fs.readFile(conf.file, function(err, data) {
+			var stats = getStats(data + "");
+			res.send(stats);
+		});
+	} else {
+		res.status(500).send({
+			error: "Internal Server Error!"
+		});
+	}
 };

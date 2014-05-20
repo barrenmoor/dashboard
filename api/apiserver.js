@@ -19,5 +19,6 @@ app.get('/metrics/branchcoverage', links.branchcoverage);
 app.get('/metrics/staticviolations', links.staticviolations);
 app.get('/metrics/defectdistribution', links.defectdistribution);
 app.get('/metrics/defectstatistics', links.defectstatistics);
+app.get('/metrics/teststatistics', links.teststatistics);
 
 app.listen(8082);
