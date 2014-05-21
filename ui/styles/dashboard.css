@@ -241,6 +241,10 @@ body {
 	cursor: pointer;
 }
 
+.dashboard-list {
+	width: 800px;
+}
+
 .dashboard-index-cell {
 	width: 40px;
 }
