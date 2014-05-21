@@ -4,11 +4,11 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 	$routeProvider
 		.when('/', {
 			controller : 'MainCtrl',
-			templateUrl : 'main.html'
+			templateUrl : 'templates/main.html'
 		})
 		.when('/:dashboardId', {
 			controller: 'DashboardCtrl',
-			templateUrl: 'dashboard.html'
+			templateUrl: 'templates/dashboard.html'
 		});
 })
 
@@ -91,7 +91,7 @@ angular.module('widgets', [])
 		restrict: 'E',
 		transclude: true,
 		scope: {title: '@', dataUrl: '@', type: '@', id: '@'},
-		templateUrl: 'widget.html',
+		templateUrl: 'templates/widget.html',
 		replace: true,
 		controller: function ($scope, $element, $http) {
 			$scope.widget = {};
@@ -147,7 +147,7 @@ angular.module('widgets', [])
 		restrict: 'E',
 		transclude: true,
 		scope: {data: '=', type: '=', options: '='},
-		templateUrl: 'datagadget.html',
+		templateUrl: 'templates/datagadget.html',
 		replace: true
 	};
 });
