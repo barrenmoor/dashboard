@@ -3,12 +3,14 @@ var bodyParser = require('body-parser');
 
 var links = require('./apiserverlib/links');
 
+var logger = links.getLogger();
+
 var app = express();
 
 app.use(bodyParser());
 
 app.use(function(req, res, next){
-  console.log('%s %s', req.method, req.url);
+  logger.debug('%s %s', req.method, req.url);
   next();
 });
 

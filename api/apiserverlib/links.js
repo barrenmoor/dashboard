@@ -1,6 +1,18 @@
 var http = require('http');
 var fs = require('fs');
 
+exports.getLogger = function() {
+	var log4js = require('log4js');
+	log4js.configure("log4js-api-conf.json", {});
+
+	var logger = log4js.getLogger("apiserver");
+	logger.setLevel('DEBUG');
+
+	return logger;
+};
+
+var logger = exports.getLogger();
+
 var DeltaRecordUtil = function(green, value, file, precision) {
 	var response;
 	var delta = 0;
@@ -262,10 +274,10 @@ exports.defectcount = function(req, res) {
 	var conf = prodManagement.getConf("defectcount");
 
 	phantom.create(function(ph) {
-		console.log("opening enotify9-1");
+		logger.debug("opening enotify9-1");
 		return ph.createPage(function(page) {
 			return page.open("http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/index.html", function(status) {
-				console.log("opened enotify9-1? ", status);
+				logger.debug("opened enotify9-1? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
 				page.evaluate(function(conf) {
@@ -300,10 +312,10 @@ exports.linecoverage = function(req, res) {
 
 	var phantom = require('phantom');
 	phantom.create(function(ph) {
-		console.log("opening sonar");
+		logger.debug("opening sonar");
 		return ph.createPage(function(page) {
 			return page.open(conf.url, function(status) {
-				console.log("opened sonar? ", status);
+				logger.debug("opened sonar? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
 				page.evaluate(function() {
@@ -329,10 +341,10 @@ exports.branchcoverage = function(req, res) {
 
 	var phantom = require('phantom');
 	phantom.create(function(ph) {
-		console.log("opening sonar");
+		logger.debug("opening sonar");
 		return ph.createPage(function(page) {
 			return page.open(conf.url, function(status) {
-				console.log("opened sonar? ", status);
+				logger.debug("opened sonar? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
 				page.evaluate(function() {
@@ -358,10 +370,18 @@ exports.staticviolations = function(req, res) {
 	var conf = prodManagement.getConf("staticviolations");
 
 	phantom.create(function(ph) {
-		console.log("opening sonar");
+		logger.debug("opening sonar");
 		return ph.createPage(function(page) {
+			// page.set('settings.resourceTimeout', 30000); //30 seconds
+			// page.onResourceTimeout = function(e) {
+			// 	logger.debug(e ? (e.url + ": " + e.errorCode + " " + e.errorString) : "Resource timeout: " + conf.url);
+			// 	res.status(500).send({
+			// 		error: "Internal Server Error"
+			// 	});
+			// 	ph.exit();
+			// };
 			return page.open(conf.url, function(status) {
-				console.log("opened sonar? ", status);
+				logger.debug("opened sonar? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
 				page.evaluate(function() {
@@ -398,10 +418,10 @@ exports.defectstatistics = function(req, res) {
 
 	var phantom = require('phantom');
 	phantom.create(function(ph) {
-		console.log("opening enotify9-1");
+		logger.debug("opening enotify9-1");
 		return ph.createPage(function(page) {
 			return page.open(conf.url, function(status) {
-				console.log("opened enotify9-1? ", status);
+				logger.debug("opened enotify9-1? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
 				page.evaluate(function() {
@@ -550,10 +570,10 @@ exports.defectdistribution = function(req, res) {
 
 	var phantom = require('phantom');
 	phantom.create(function(ph) {
-		console.log("opening enotify9-1");
+		logger.debug("opening enotify9-1");
 		return ph.createPage(function(page) {
 			return page.open(conf.url, function(status) {
-				console.log("opened enotify9-1? ", status);
+				logger.debug("opened enotify9-1? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
 				page.evaluate(function() {

@@ -1,5 +1,17 @@
 var http = require('http');
 
+exports.getLogger = function() {
+	var log4js = require('log4js');
+	log4js.configure("log4js-ui-conf.json", {});
+
+	var logger = log4js.getLogger("uiserver");
+	logger.setLevel('DEBUG');
+
+	return logger;
+};
+
+var logger = exports.getLogger();
+
 var dashboards = [{
 	id: "dashboard-0",
 	title: "UCCX Risk to Ship"
@@ -106,7 +118,7 @@ exports.apicall = function(req, res) {
 
 	http.get(url, function(apiresponse) {
 		if(apiresponse.statusCode != 200) {
-			console.log("Error: " + url + ": " + apiresponse.statusCode);
+			logger.debug("Error: " + url + ": " + apiresponse.statusCode);
 			res.status(500).send({
 				apiStatus: apiresponse.statusCode,
 				error: "Internal Server Error!"
@@ -120,8 +132,7 @@ exports.apicall = function(req, res) {
 			});
 		}
 	}).on('error', function(e) {
-		console.log("Error: " + url);
-		console.log(e);
+		logger.debug("Error: " + url);
 		res.status(500).send({
 			apiStatus: -1,
 			error: "Internal Server Error!"

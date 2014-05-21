@@ -1,0 +1,9 @@
+{
+    "appenders": [{
+        "type": "file",
+        "filename": "logs/apiserver_log_file.log",
+        "maxLogSize": 20480,
+        "backups": 3,
+        "category": "apiserver"
+    }]
+}

@@ -1,0 +1,9 @@
+{
+    "appenders": [{
+        "type": "file",
+        "filename": "logs/uiserver_log_file.log",
+        "maxLogSize": 20480,
+        "backups": 3,
+        "category": "uiserver"
+    }]
+}
