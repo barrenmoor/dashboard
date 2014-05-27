@@ -578,7 +578,7 @@ exports.defectdistribution = function(req, res) {
 
 				page.evaluate(function() {
 					var owners = [];
-					$("table#Severity table.solid_blue_border_full tr td:nth-child(3)").each(function() {
+					$("table[style!='display: none'] table.solid_blue_border_full tr td:nth-child(3)").each(function() {
 						owners.push($(this).text().trim());
 					});
 					return owners;
