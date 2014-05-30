@@ -47,7 +47,7 @@ angular.module('dashboard', ['ngRoute', 'widgets'])
 		};
 
 		$(document).ready(function() {
-			var refreshUtil = new RefreshUtil(60 * 60);
+			var refreshUtil = new RefreshUtil(90 * 60);
 			refreshUtil.startTimer();
 		});
 
