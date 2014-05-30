@@ -94,6 +94,7 @@ var ProductManagement = function(product) {
 				href: "/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
 			},
 			cibuild: {
+				server: "bgl-ccbu-kabini",
 				path: "/jenkins/view/UCCX_MAVEN/job/uccx_1051_fcs_ci/lastSuccessfulBuild/testReport/api/json"
 			},
 			linecoverage: {
@@ -141,6 +142,7 @@ var ProductManagement = function(product) {
 				href: "/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
 			},
 			cibuild: {
+				server: "bgl-ccbu-kabini",
 				path: "/jenkins/view/CUIC_MAVEN/job/cuic_1051_ci/lastSuccessfulBuild/testReport/api/json"
 			},
 			linecoverage: {
@@ -177,6 +179,47 @@ var ProductManagement = function(product) {
 			teststatistics: {
 				file: "cuic-tests.txt"
 			}
+		},
+		cvp: {
+			product: product,
+			staticviolations: {
+				url: "http://bxb-ccbu-sonar:9000/drilldown/violations/457335"
+			},
+			defectcount: {
+				href: "/enotify-v8/sites/ccbu/output/website/bug_list_4_buglist.html"
+			},
+			cibuild: {
+				server: "bigbend",
+				path: "/jenkins/job/CVP_Marina_CI/lastSuccessfulBuild/testReport/api/json"
+			},
+			linecoverage: {
+				url: "http://bxb-ccbu-sonar:9000/components/index/457335"
+			},
+			branchcoverage: {
+				url: "http://bxb-ccbu-sonar:9000/components/index/457335"
+			},
+			defectstatistics: {
+				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_4_buglist.html"
+			},
+			defectdistribution: {
+				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_4_buglist.html",
+				teams: [{
+					team: "SAPTARISHI",
+					members: ["manil", "aryanand", "sujunas", "pprabhan", "vanbalas", "ssamadda", "susdatta"]
+				},{
+					team: "F22-RAPTORS",
+					members: ["radmohan", "ananpadm", "ankearor", "sunilku5", "samshar2", "sahramu", "avinkum2"]
+				},{
+					team: "COOL SHARKS",
+					members: ["sumuthur", "amagulat", "kvarun", "sakssing", "sumuppal", "txavier", "shimoham"]
+				},{
+					team: "TYPHOONS",
+					members: ["bbilas", "sanjeek5", "rvaliyap", "smogalis", "bmajumde", "ricsing2", "dbissa", "rguvvala"]
+				}]
+			},
+			teststatistics: {
+				file: "cvp-tests.txt"
+			}
 		}
 	};
 
@@ -195,7 +238,7 @@ exports.cibuild = function(req, res) {
 	var conf = prodManagement.getConf("cibuild");
 
 	var request = http.request({
-		host: 'bgl-ccbu-kabini',
+		host: conf.server,
 		path: conf.path,
 		method: 'GET'
 	}, function(response) {

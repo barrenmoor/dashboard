@@ -18,6 +18,9 @@ var dashboards = [{
 },{
 	id: "dashboard-1",
 	title: "CUIC Risk to Ship"
+},{
+	id: "dashboard-2",
+	title: "CVP Risk to Ship"
 }];
 
 var dashboardwidgets = {
@@ -100,6 +103,43 @@ var dashboardwidgets = {
 			type: 'DELTA',
 			options: {unit: "%", green: "up", draggable: true},
 			dataUrl: 'http://localhost:8082/metrics/linecoverage?product=cuic'
+		}],
+		"dashboard-2": [{
+			id: 'cvp-widget-id-0',
+			title: 'CVP DEFECT DISTRIBUTION',
+			type: 'CHART',
+			options: {draggable: false},
+			dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=cvp'
+		}, {
+			id: 'cvp-widget-id-1',
+			title: 'DEFECTS COUNT',
+			type: 'ABSOLUTE',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/defectcount?product=cvp'
+		}, {
+			id: 'cvp-widget-id-2',
+			title: 'DEFECT STATISTICS',
+			type: 'MULTISTAT',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/defectstatistics?product=cvp'
+		}, {
+			id: 'cvp-widget-id-3',
+			title: 'STATIC VIOLATIONS',
+			type: 'DELTA',
+			options: {green: "down", draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/staticviolations?product=cvp'
+		}, {
+			id: 'cvp-widget-id-4',
+			title: 'CI BUILD',
+			type: 'MULTISTAT',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/cibuild?product=cvp'
+		}, {
+			id: 'cvp-widget-id-5',
+			title: 'CODE COVERAGE',
+			type: 'DELTA',
+			options: {unit: "%", green: "up", draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/linecoverage?product=cvp'
 		}]
 	};
 
