@@ -62,11 +62,20 @@ var DeltaRecordUtil = function(green, value, file, precision) {
 					} else {
 						var prevResults = getValues(data + "");
 
-						delta = value - (value == prevResults.curr ? prevResults.prev : prevResults.curr);
+						var prevDelta = prevResults.curr - prevResults.prev;
+						var wasBetter = (green == "up") ? (prevDelta > 0) : (prevDelta < 0);
+
+						if(value != prevResults.curr) {
+							delta = wasBetter ? (value - prevResults.curr) : (value - prevResults.prev);
+						} else {
+							delta = value - prevResults.prev;
+						}
+
 						better = (green == "up") ? (delta > 0) : (delta < 0);
 
 						if(value != prevResults.curr) {
-							fs.writeFile(file, getLine(prevResults.curr, value), success);
+							var updatedRecord = wasBetter ? getLine(prevResults.curr, value) : getLine(prevResults.prev, value);
+							fs.writeFile(file, updatedRecord, success);
 							return;
 						} else {
 							success();
