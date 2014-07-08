@@ -145,24 +145,20 @@ var ProductManagement = function(product) {
 		cuic: {
 			product: product,
 			staticviolations: {
-				//10.5.1 url//url: "http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/503756"
-				url: "http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/621533"
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/660075"
 			},
 			defectcount: {
 				href: "/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
 			},
 			cibuild: {
 				server: "bgl-ccbu-kabini",
-				//10.5.1 path//path: "/jenkins/view/CUIC_MAVEN/job/cuic_1051_ci/lastSuccessfulBuild/testReport/api/json"
-				path: "/jenkins/view/CUIC_MAVEN/job/cuic_1101_ci/lastSuccessfulBuild/testReport/api/json"
+				path: "/jenkins/view/CUIC_MAVEN/job/cuic_1101_staging_ci/lastSuccessfulBuild/testReport/api/json"
 			},
 			linecoverage: {
-				//10.5.1 url//url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756"
-				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/621533"
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/660075"
 			},
 			branchcoverage: {
-				//10.5.1 url//url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/503756"
-				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/621533"
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/660075"
 			},
 			defectstatistics: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_5_buglist.html"
