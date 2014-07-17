@@ -199,7 +199,7 @@ var ProductManagement = function(product) {
 			},
 			cibuild: {
 				server: "bigbend",
-				path: "/jenkins/job/CVP_Marina_CI/lastSuccessfulBuild/testReport/api/json"
+				path: "/jenkins/view/CVP/job/CVP_AUROVILLE_CI/lastSuccessfulBuild/testReport/api/json"
 			},
 			linecoverage: {
 				url: "http://bxb-ccbu-sonar:9000/components/index/457335"
