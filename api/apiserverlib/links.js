@@ -104,7 +104,7 @@ var ProductManagement = function(product) {
 			},
 			cibuild: {
 				server: "bgl-ccbu-kabini",
-				path: "/jenkins/view/UCCX_MAVEN/job/uccx_1051_fcs_ci/lastSuccessfulBuild/testReport/api/json"
+				path: "/jenkins/view/UCCX_MAVEN/job/uccx_1061_ci/lastSuccessfulBuild/testReport/api/json"
 			},
 			linecoverage: {
 				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/392020"
@@ -176,13 +176,10 @@ var ProductManagement = function(product) {
 					members: ["srevunur", "ssonnad", "visgiri", "rajagkri"]
 				}, {
 					team: "Range Rover",
-					members: ["agartia", "cthadika", "sasivana", "shailjas", "vesane"]
-				}, {
-					team: "Hummer",
-					members: ["dihegde", "karajase", "mandhing", "shidas", "sobenny"]
-				}, {
+					members: ["agartia", "cthadika", "shailjas", "vesane"]
+				}, { 
 					team: "Documentation",
-					members: ["jnishant"]
+					members: ["jnishant", "shsupriy"]
 				}]
 			},
 			teststatistics: {
