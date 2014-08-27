@@ -255,7 +255,13 @@ exports.cibuild = function(req, res) {
         });
 
         response.on('end', function() {
-        	var json = JSON.parse(output);
+        	try {
+        		var json = JSON.parse(output);
+        	} catch (e) {
+				res.status(500).send({
+					error: "CI build data is not parseable."
+				});
+        	}
 
         	var durations = [];
         	var longestRunning = 0;
