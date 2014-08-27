@@ -261,6 +261,8 @@ exports.cibuild = function(req, res) {
 				res.status(500).send({
 					error: "CI build data is not parseable."
 				});
+
+				return;
         	}
 
         	var durations = [];
