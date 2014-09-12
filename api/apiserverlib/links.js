@@ -470,14 +470,6 @@ exports.staticviolations = function(req, res) {
 	phantom.create(function(ph) {
 		logger.debug("opening sonar");
 		return ph.createPage(function(page) {
-			// page.set('settings.resourceTimeout', 30000); //30 seconds
-			// page.onResourceTimeout = function(e) {
-			// 	logger.debug(e ? (e.url + ": " + e.errorCode + " " + e.errorString) : "Resource timeout: " + conf.url);
-			// 	res.status(500).send({
-			// 		error: "Internal Server Error"
-			// 	});
-			// 	ph.exit();
-			// };
 			return page.open(conf.url, function(status) {
 				logger.debug("opened sonar? ", status);
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
@@ -675,18 +667,36 @@ exports.defectdistribution = function(req, res) {
 				page.injectJs("scripts/thirdparty/jquery/jquery-1.11.0.min.js");
 
 				page.evaluate(function() {
-					var owners = [];
+					var result = [];
 					$("table[style!='display: none'] table.solid_blue_border_full tr td:nth-child(3)").each(function() {
-						owners.push($(this).text().trim());
+						var status = $(this).parent().find("td:nth-child(13)").text().trim();
+						var owner = $(this).text().trim();
+
+						result.push({
+							owner: owner,
+							status: status
+						});
 					});
-					return owners;
+					return result;
 				}, function(result) {
 					var calculator = new DefectDistributionCalc();
+					var newcount = 0, resolvedcount = 0;
+
 					for(var i in result) {
-						calculator.updateSeries(result[i]);
+						if(result[i].status == 'N') {
+							newcount++;
+							continue;
+						} else if(result[i].status == 'R') {
+							resolvedcount++;
+							continue;
+						} else {
+							calculator.updateSeries(result[i].owner);
+						}
 					}
 					res.send({
-						values: calculator.getSeries()
+						values: calculator.getSeries(),
+						newcount: newcount,
+						resolvedcount: resolvedcount
 					});
 
 					ph.exit();

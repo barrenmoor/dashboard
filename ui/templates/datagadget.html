@@ -19,6 +19,9 @@
 		<td class="content-cell chart-data-cell chart-data">{{stat.value}}</td>
 		<td class="content-cell data-label">{{stat.label}}</td>
 	</tr>
+	<tr ng-if="type == 'CHART'">
+		<td colspan="3" class="chart-footer-cell chart-footer-data"><span class="chart-footer-data-label">New - </span><span class="chart-footer-data-value">{{data.newcount}}</span><span class="chart-footer-data-label">, Resolved - </span><span class="chart-footer-data-value">{{data.resolvedcount}}</span></td>
+	</tr>
 	<tr ng-if="type == 'DELTA'">
 		<td class="content-cell delta-data">{{data.value}}<span class="delta-unit-big">{{options.unit}}</span></td>
 	</tr>

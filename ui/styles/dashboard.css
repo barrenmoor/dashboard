@@ -256,3 +256,24 @@ body {
 .text-contrast {
 	color: #CDCDCD;
 }
+
+.chart-footer-cell {
+	padding-top: 20px;
+	padding-left: 20px;
+	text-align: left;
+}
+
+.chart-footer-data {
+	font-family: arial;
+	font-size: 20px;
+	font-style: normal;
+	font-weight: normal;
+}
+
+.chart-footer-data-label {
+	color: #ABABAB;
+}
+
+.chart-footer-data-value {
+	color: #DEDEDE;
+}
