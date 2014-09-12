@@ -21,6 +21,9 @@ var dashboards = [{
 },{
 	id: "dashboard-2",
 	title: "CVP Risk to Ship"
+},{
+	id: "dashboard-3",
+	title: "Voice Browser Risk to Ship"
 }];
 
 var dashboardwidgets = {
@@ -140,6 +143,43 @@ var dashboardwidgets = {
 			type: 'DELTA',
 			options: {unit: "%", green: "up", draggable: true},
 			dataUrl: 'http://localhost:8082/metrics/linecoverage?product=cvp'
+		}],
+		"dashboard-3": [{
+			id: 'vb-widget-id-0',
+			title: 'VB DEFECT DISTRIBUTION',
+			type: 'CHART',
+			options: {draggable: false},
+			dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=vb'
+		}, {
+			id: 'vb-widget-id-1',
+			title: 'DEFECTS COUNT',
+			type: 'ABSOLUTE',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/defectcount?product=vb'
+		}, {
+			id: 'vb-widget-id-2',
+			title: 'DEFECT STATISTICS',
+			type: 'MULTISTAT',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/defectstatistics?product=vb'
+		}, {
+			id: 'vb-widget-id-3',
+			title: 'STATIC VIOLATIONS',
+			type: 'DELTA',
+			options: {green: "down", draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/staticviolations?product=vb'
+		}, {
+			id: 'vb-widget-id-4',
+			title: 'CI BUILD',
+			type: 'MULTISTAT',
+			options: {draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/cibuild?product=vb'
+		}, {
+			id: 'vb-widget-id-5',
+			title: 'CODE COVERAGE',
+			type: 'DELTA',
+			options: {unit: "%", green: "up", draggable: true},
+			dataUrl: 'http://localhost:8082/metrics/linecoverage?product=vb'
 		}]
 	};
 

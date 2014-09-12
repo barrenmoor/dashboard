@@ -210,6 +210,47 @@ var ProductManagement = function(product) {
 			defectdistribution: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_4_buglist.html",
 				teams: [{
+        				team: "SAPTARISHI",
+        				members: ["manil", "sujunas", "pprabhan", "vanbalas", "ssamadda"]
+				},{
+        				team: "F22-RAPTORS",
+        				members: ["radmohan", "ananpadm", "bbilas", "visyadav", "samshar2", "sumuppal"]
+				},{
+        				team: "COOL SHARKS",
+        				members: ["sumuthur", "kvarun", "txavier", "rvaliyap", "ricsing2", "bmajumde", " sdoddali", "sudhgaur"]
+				},{
+        				team: "WHITEWATER",
+        				members: ["avinkum2", "rguvvala", "shimoham"]
+				}]
+			},
+			teststatistics: {
+				file: "cvp-tests.txt"
+			}
+		},
+		vb: {
+			product: product,
+			staticviolations: {
+				url: "http://bxb-ccbu-sonar:9000/drilldown/violations/648965"
+			},
+			defectcount: {
+				href: "/enotify-v8/sites/ccbu/output/website/bug_list_47_buglist.html"
+			},
+			cibuild: {
+				server: "bgl-ccbu-kabini",
+				path: "/jenkins/view/VOICEBROWSER/job/BANSURI_r11.0.1_CI/lastSuccessfulBuild/testReport/api/json"
+			},
+			linecoverage: {
+				url: "http://bxb-ccbu-sonar:9000/components/index/648965"
+			},
+			branchcoverage: {
+				url: "http://bxb-ccbu-sonar:9000/components/index/648965"
+			},
+			defectstatistics: {
+				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_47_buglist.html"
+			},
+			defectdistribution: {
+				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_47_buglist.html",
+				teams: [{
 					team: "SAPTARISHI",
 					members: ["manil", "aryanand", "sujunas", "pprabhan", "vanbalas", "ssamadda", "susdatta"]
 				},{
@@ -224,7 +265,7 @@ var ProductManagement = function(product) {
 				}]
 			},
 			teststatistics: {
-				file: "cvp-tests.txt"
+				file: "vb-tests.txt"
 			}
 		}
 	};
