@@ -610,7 +610,16 @@ exports.defectdistribution = function(req, res) {
 			getGoogleChartSeries : function() {
 				var googleChartSeries = [];
 				for(var i in series) {
-					googleChartSeries.push([series[i].label, series[i].value]);
+					if(series[i].label === 'Unassigned') {
+						googleChartSeries.push({
+							name : series[i].label,
+							y: series[i].value,
+							sliced: true,
+							selected: true
+						});
+					} else {
+						googleChartSeries.push([series[i].label, series[i].value]);
+					}
 				}
 
 				return googleChartSeries;

@@ -127,7 +127,12 @@ angular.module('widgets', [])
 								    chart: {
 								        plotBackgroundColor: '#333333',
 								        margin: [0, 0, 0, 0],
-								        plotShadow: false
+								        plotShadow: false,
+								        options3d: {
+								        	enabled: true,
+								        	alpha: 45,
+								        	beta: 0
+								        }
 								    },
 								    title: {
 								        text: ''
@@ -146,6 +151,7 @@ angular.module('widgets', [])
 								                },
 								                distance: 30
 								            },
+								            depth: 35,
 								            showInLegend: true
 								        }
 								    },
