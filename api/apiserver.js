@@ -7,7 +7,11 @@ var logger = links.getLogger();
 
 var app = express();
 
-app.use(bodyParser());
+//app.use(bodyParser());
+app.use(bodyParser.urlencoded({
+	extended: true
+}));
+app.use(bodyParser.json());
 
 app.use(function(req, res, next){
   logger.debug('%s %s', req.method, req.url);

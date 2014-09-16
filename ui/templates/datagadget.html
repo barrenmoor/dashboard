@@ -12,15 +12,10 @@
 			<img ng-if="data.actual >= data.threshold" class="absolute-icon-error" src="images/not-so-good-2.png">			
 		</td>
 	</tr>
-	<tr ng-if="type == 'CHART'" ng-repeat="stat in data.values">
-		<td class="chart-content-cell chart-data">
-			<div ng-if="stat.value > 0" class="chart-div" style="width: {{stat.perc}}%; background-color: {{stat.color}}">&nbsp;</div>
-		</td>
-		<td class="content-cell chart-data-cell chart-data">{{stat.value}}</td>
-		<td class="content-cell data-label">{{stat.label}}</td>
-	</tr>
 	<tr ng-if="type == 'CHART'">
-		<td colspan="3" class="chart-footer-cell chart-footer-data"><span class="chart-footer-data-label">New - </span><span class="chart-footer-data-value">{{data.newcount}}</span><span class="chart-footer-data-label">, Resolved - </span><span class="chart-footer-data-value">{{data.resolvedcount}}</span></td>
+		<td>
+			<div id="pie_container" style="min-width: 450px; height: 550px; max-width: 450px; margin: 0 auto"></div>
+		</td>
 	</tr>
 	<tr ng-if="type == 'DELTA'">
 		<td class="content-cell delta-data">{{data.value}}<span class="delta-unit-big">{{options.unit}}</span></td>

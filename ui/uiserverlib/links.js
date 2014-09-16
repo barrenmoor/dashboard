@@ -29,7 +29,7 @@ var dashboards = [{
 var dashboardwidgets = {
 		"dashboard-0": [{
 			id: 'uccx-widget-id-0',
-			title: 'UCCX DEFECT DISTRIBUTION',
+			title: 'UCCX S1-S5 DEFECTS',
 			type: 'CHART',
 			options: {draggable: false},
 			dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=uccx'
@@ -72,7 +72,7 @@ var dashboardwidgets = {
 		}],
 		"dashboard-1": [{
 			id: 'cuic-widget-id-0',
-			title: 'CUIC DEFECT DISTRIBUTION',
+			title: 'CUIC S1-S5 DEFECTS',
 			type: 'CHART',
 			options: {draggable: false},
 			dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=cuic'
@@ -109,7 +109,7 @@ var dashboardwidgets = {
 		}],
 		"dashboard-2": [{
 			id: 'cvp-widget-id-0',
-			title: 'CVP DEFECT DISTRIBUTION',
+			title: 'CVP S1-S5 DEFECTS',
 			type: 'CHART',
 			options: {draggable: false},
 			dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=cvp'
@@ -146,7 +146,7 @@ var dashboardwidgets = {
 		}],
 		"dashboard-3": [{
 			id: 'vb-widget-id-0',
-			title: 'VB DEFECT DISTRIBUTION',
+			title: 'VB S1-S5 DEFECTS',
 			type: 'CHART',
 			options: {draggable: false},
 			dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=vb'

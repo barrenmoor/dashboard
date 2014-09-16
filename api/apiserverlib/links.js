@@ -210,16 +210,16 @@ var ProductManagement = function(product) {
 			defectdistribution: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_4_buglist.html",
 				teams: [{
-        				team: "SAPTARISHI",
-        				members: ["manil", "sujunas", "pprabhan", "vanbalas", "ssamadda"]
+        				team: "Cool Sharks",
+        				members: ["sumuthur", "kvarun", "txavier", "rvaliyap", "ricsing2", "bmajumde", "sdoddali", "sudhgaur"]
 				},{
-        				team: "F22-RAPTORS",
+        				team: "F22 Raptors",
         				members: ["radmohan", "ananpadm", "bbilas", "visyadav", "samshar2", "sumuppal"]
 				},{
-        				team: "COOL SHARKS",
-        				members: ["sumuthur", "kvarun", "txavier", "rvaliyap", "ricsing2", "bmajumde", " sdoddali", "sudhgaur"]
+        				team: "Saptarishi",
+        				members: ["manil", "sujunas", "pprabhan", "vanbalas", "ssamadda"]
 				},{
-        				team: "WHITEWATER",
+        				team: "Whitewater",
         				members: ["avinkum2", "rguvvala", "shimoham"]
 				}]
 			},
@@ -251,17 +251,14 @@ var ProductManagement = function(product) {
 			defectdistribution: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_47_buglist.html",
 				teams: [{
-					team: "SAPTARISHI",
-					members: ["manil", "aryanand", "sujunas", "pprabhan", "vanbalas", "ssamadda", "susdatta"]
+					team: "Falcons",
+					members: ["anjeelan", "gubt", "mallikar", "sundravi", "vijgupt2"]
 				},{
-					team: "F22-RAPTORS",
-					members: ["radmohan", "ananpadm", "ankearor", "sunilku5", "samshar2", "sahramu", "avinkum2"]
+					team: "Finch",
+					members: ["chacktho", "ndreddy", "pachaita", "varampra", "sujimoha", "bagoswam"]
 				},{
-					team: "COOL SHARKS",
-					members: ["sumuthur", "amagulat", "kvarun", "sakssing", "sumuppal", "txavier", "shimoham"]
-				},{
-					team: "TYPHOONS",
-					members: ["bbilas", "sanjeek5", "rvaliyap", "smogalis", "bmajumde", "ricsing2", "dbissa", "rguvvala"]
+					team: "Flamingos",
+					members: ["amagniho", "goujain", "ranjeetk", "viknaik", "ajisrini", "psuyambu"]
 				}]
 			},
 			teststatistics: {
@@ -569,91 +566,54 @@ exports.defectdistribution = function(req, res) {
 
 	var DefectDistributionCalc = function() {
 		var teams = conf.teams;
-
-		var series = [{
-			label: "Others",
-			value: 0,
-			perc: 0.0
-		}];
-
-		for(var i in teams) {
-			series.push({
-				label: teams[i].team,
-				value: 0,
-				perc: 0.0
-			});
-		}
+		var series = [];
 
 		var findTeam = function(member) {
+			if(member === 'unassigned') {
+				return "Unassigned";
+			} else if(member === 'resolved') {
+				return "Resolved";
+			}
+
 			for(var i in teams) {
 				if(teams[i].members.indexOf(member) != -1) {
 					return teams[i].team;
 				}
 			}
+
 			return "Others";
 		};
 
-		var getColorAt = function(at) {
-			var steps = 100;
-			var from = 1, to = 0;
-			at = at > steps ? steps : at;
-
-			var howMany = parseInt(Number(511 * at / steps).toFixed(0));
-
-			var rgb = ["00", "00", "00"];
-			rgb[from] = "ff";
-
-			if(howMany < 256) {
-				var increased = parseInt(howMany).toString(16);
-				increased = increased.length == 1 ? "0" + increased : increased;
-
-				rgb[to] = increased;
-			} else {
-				var reduced = parseInt(511 - howMany).toString(16);
-				reduced = reduced.length == 1 ? "0" + reduced : reduced;
-
-				rgb[to] = "ff";
-				rgb[from] = reduced;
-			}
-
-			return "#" + rgb[0] + rgb[1] + rgb[2];
-		};
-
-
-		var updatePercentages = function() {
-			series.sort(function(a, b) {
-				return b.value - a.value;
-			});
-
-			var max = series[0].value;
-
-			for(var i in series) {
-				if(series[i].value == 0) {
-					break;
-				}
-
-				series[i].perc = parseFloat(Number((series[i].value * 100.0) / max).toFixed(2));
-				series[i].color = getColorAt(series[i].perc);
-			}
-
-			series.sort(function(a, b) {
-				return a.value - b.value;
-			});
-		};
 
 		return {
 			updateSeries : function(owner) {
 				var team = findTeam(owner);
+				var stat;
+
 				for(var i in series) {
 					if(series[i].label == team) {
-						series[i].value++;
+						stat = series[i];
+						break;
 					}
+				}
+
+				if(stat) {
+					stat.value++;
+				} else {
+					series.push({
+						label: team,
+						value: 1
+					});
 				}
 			},
 
-			getSeries : function() {
-				updatePercentages();
-				return series;
+			getGoogleChartSeries : function() {
+				var googleChartSeries = [];
+				for(var i in series) {
+					googleChartSeries.push([series[i].label, series[i].value]);
+				}
+
+				return googleChartSeries;
 			}
 		};	
 	};
@@ -680,23 +640,18 @@ exports.defectdistribution = function(req, res) {
 					return result;
 				}, function(result) {
 					var calculator = new DefectDistributionCalc();
-					var newcount = 0, resolvedcount = 0;
 
 					for(var i in result) {
 						if(result[i].status == 'N') {
-							newcount++;
-							continue;
+							calculator.updateSeries('unassigned');
 						} else if(result[i].status == 'R') {
-							resolvedcount++;
-							continue;
+							calculator.updateSeries('resolved');
 						} else {
 							calculator.updateSeries(result[i].owner);
 						}
 					}
 					res.send({
-						values: calculator.getSeries(),
-						newcount: newcount,
-						resolvedcount: resolvedcount
+						values: calculator.getGoogleChartSeries()
 					});
 
 					ph.exit();

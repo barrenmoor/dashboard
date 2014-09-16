@@ -121,6 +121,58 @@ angular.module('widgets', [])
 						if(options.draggable) {
 							setDraggable(id);
 						}
+						if(type == 'CHART') {
+							setTimeout(function() {
+								$('#pie_container').highcharts({
+								    chart: {
+								        plotBackgroundColor: '#333333',
+								        margin: [0, 0, 0, 0],
+								        plotShadow: false
+								    },
+								    title: {
+								        text: ''
+								    },
+								    tooltip: {
+								        pointFormat: '<b>{point.y}</b>'
+								    },
+								    plotOptions: {
+								        pie: {
+								            dataLabels: {
+								                enabled: true,
+								                format: '{point.y}',
+								                style: {
+								                	color: "#DEDEDE",
+								                	fontSize: "32px"
+								                },
+								                distance: 30
+								            },
+								            showInLegend: true
+								        }
+								    },
+								    navigation: {
+								    	buttonOptions: {
+								    		enabled: false
+								    	}
+								    },
+								    legend: {
+								    	labelFormat: "{y} - {name}",
+								    	itemStyle: {
+								    		color: '#ffffff',
+								    		fontSize: '16px',
+								    		fontWeight: 'normal'
+								    	},
+								    	layout: 'horizontal',
+								    	align: 'left',
+								    	verticalAlign: 'top',
+								    	y: -10
+								    },
+								    series: [{
+								        type: 'pie',
+								        data: data.values
+								    }]
+								});
+							}, 100);
+						}
 					}).error(function() {
 						$scope.widget.type = 'ERROR';
 						$scope.widget.data = {
