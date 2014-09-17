@@ -127,12 +127,16 @@ angular.module('widgets', [])
 								    chart: {
 								        plotBackgroundColor: '#333333',
 								        margin: [0, 0, 0, 0],
+								        spacing: [0, 0, 0, 0],
 								        plotShadow: false,
 								        options3d: {
 								        	enabled: true,
 								        	alpha: 45,
 								        	beta: 0
 								        }
+								    },
+								    credits: {
+								    	enabled: false
 								    },
 								    title: {
 								        text: ''
@@ -144,15 +148,25 @@ angular.module('widgets', [])
 								        pie: {
 								            dataLabels: {
 								                enabled: true,
-								                format: '{point.y}',
-								                style: {
-								                	color: "#DEDEDE",
-								                	fontSize: "32px"
+								                formatter: function() {
+								                	return "<span style='font-weight:bold;font-size:20px;'>" + this.point.y + "</span>" + 
+								                		"<div style='width:60px; margin:0px; padding:0px; overflow:hidden; text-overflow:ellipsis; display:inline-block; font-size:11px;'>" + 
+								                		"&nbsp;-&nbsp;" +
+								                		this.point.name + 
+								                		"</div>";
 								                },
-								                distance: 30
+								                useHTML: true,
+								                style: {
+								                	color: "#DEDEDE"
+								                },
+								                distance: 5
 								            },
 								            depth: 35,
-								            showInLegend: true
+								            showInLegend: false,
+								            colors: ['#90ed7d', '#f7a35c', '#8085e9', '#f15c80', '#7cb5ec', '#e4d354', '#8085e8', '#535358', '#8d4653', '#91e8e1'],
+											slicedOffset: 15,
+								            startAngle: 20,
+								            shadow: true
 								        }
 								    },
 								    navigation: {
@@ -161,10 +175,10 @@ angular.module('widgets', [])
 								    	}
 								    },
 								    legend: {
-								    	labelFormat: "{y} - {name}",
+								    	labelFormat: "{name} ({y})",
 								    	itemStyle: {
 								    		color: '#ffffff',
-								    		fontSize: '16px',
+								    		fontSize: '18px',
 								    		fontWeight: 'normal'
 								    	},
 								    	layout: 'horizontal',
