@@ -189,6 +189,14 @@ exports.dashboards = function(req, res) {
 
 exports.widgets = function(req, res) {
 	var responseData = dashboardwidgets[req.params.dashboardId];
+	if(responseData && responseData.length > 0) {
+		for(var counter = 1; counter < responseData.length; counter++) {
+			var swapIndex = Math.floor((Math.random() * (responseData.length - 1)) + 1);
+			var temp = responseData[swapIndex];
+			responseData[swapIndex] = responseData[counter];
+			responseData[counter] = temp;
+		}
+	}
 	res.send(responseData ? responseData : []);
 };
 
