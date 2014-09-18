@@ -149,7 +149,7 @@ angular.module('widgets', [])
 								            dataLabels: {
 								                enabled: true,
 								                formatter: function() {
-								                	return "<span style='font-weight:bold;font-size:20px;'>" + this.point.y + "</span>" + 
+								                	return "<span style='font-weight:bold;font-size:32px;'>" + this.point.y + "</span>" + 
 								                		"<div style='width:60px; margin:0px; padding:0px; overflow:hidden; text-overflow:ellipsis; display:inline-block; font-size:11px;'>" + 
 								                		"&nbsp;-&nbsp;" +
 								                		this.point.name + 
