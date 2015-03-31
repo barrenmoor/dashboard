@@ -24,6 +24,9 @@ var dashboards = [{
 },{
 	id: "dashboard-3",
 	title: "Voice Browser Risk to Ship"
+},{
+	id: "dashboard-4",
+	title: "Social Miner Risk to ship"
 }];
 
 var dashboardwidgets = {
@@ -65,10 +68,10 @@ var dashboardwidgets = {
 			dataUrl: 'http://localhost:8082/metrics/linecoverage?product=uccx'
 		}, {
 			id: 'uccx-widget-id-6',
-			title: 'LOAD & AUTOMATION',
+			title: 'AUTOMATED TESTS',
 			type: 'MULTISTAT',
 			options: {draggable: true},
-			dataUrl: 'http://localhost:8082/metrics/teststatistics?product=uccx'
+			dataUrl: 'http://10.78.93.111:8087/results/automation'
 		}],
 		"dashboard-1": [{
 			id: 'cuic-widget-id-0',
@@ -180,7 +183,44 @@ var dashboardwidgets = {
 			type: 'DELTA',
 			options: {unit: "%", green: "up", draggable: true},
 			dataUrl: 'http://localhost:8082/metrics/linecoverage?product=vb'
-		}]
+		}],
+                "dashboard-4": [{
+                        id: 'sm-widget-id-0',
+                        title: 'SM S1-S5 DEFECTS',
+                        type: 'CHART',
+                        options: {draggable: false},
+                        dataUrl: 'http://localhost:8082/metrics/defectdistribution?product=sm'
+                }, {
+                        id: 'sm-widget-id-1',
+                        title: 'DEFECTS COUNT',
+                        type: 'ABSOLUTE',
+                        options: {draggable: true},
+                        dataUrl: 'http://localhost:8082/metrics/defectcount?product=sm'
+                }, {
+                        id: 'sm-widget-id-2',
+                        title: 'DEFECT STATISTICS',
+                        type: 'MULTISTAT',
+                        options: {draggable: true},
+                        dataUrl: 'http://localhost:8082/metrics/defectstatistics?product=sm'
+                }, {
+                        id: 'sm-widget-id-3',
+                        title: 'STATIC VIOLATIONS',
+                        type: 'DELTA',
+                        options: {green: "down", draggable: true},
+                        dataUrl: 'http://localhost:8082/metrics/staticviolations?product=sm'
+                }, {
+                        id: 'sm-widget-id-4',
+                        title: 'CI BUILD',
+                        type: 'MULTISTAT',
+                        options: {draggable: true},
+                        dataUrl: 'http://localhost:8082/metrics/cibuild?product=sm'
+                }, {
+                        id: 'sm-widget-id-5',
+                        title: 'CODE COVERAGE',
+                        type: 'DELTA',
+                        options: {unit: "%", green: "up", draggable: true},
+                        dataUrl: 'http://localhost:8082/metrics/linecoverage?product=sm'
+                }]
 	};
 
 exports.dashboards = function(req, res) {

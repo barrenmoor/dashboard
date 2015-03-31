@@ -97,20 +97,20 @@ var ProductManagement = function(product) {
 		uccx: {
 			product: product,
 			staticviolations: {
-				url: "http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/392020"
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/799747"
 			},
 			defectcount: {
 				href: "/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
 			},
 			cibuild: {
 				server: "bgl-ccbu-kabini",
-				path: "/jenkins/view/UCCX_MAVEN/job/uccx_1061_ci/lastSuccessfulBuild/testReport/api/json"
+				path: "/jenkins/view/UCCX_MAVEN/job/uccx_1101_ci/lastSuccessfulBuild/testReport/api/json"
 			},
 			linecoverage: {
-				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/392020"
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/799747"
 			},
 			branchcoverage: {
-				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/392020"
+				url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/799747"
 			},
 			defectstatistics: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html"
@@ -118,23 +118,23 @@ var ProductManagement = function(product) {
 			defectdistribution: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_2_buglist.html",
 				teams: [{
-					team: "Sparkles / Kaizen",
-					members: ["sgowlika", "npasbola", "archinna", "anukuma3", "srikasri", "ashwmeno", "kavyvish", "azekhan", "raputta", "jramagir", "asingh6", "aditysin", "mamysore", "umshastr"]
+					team: "Marut",
+					members: ["anurjain", "mshet", "sridhcha", "velanka", "usantra", "kavpraka", "archinna"]
 				},{
-					team: "Miracles / Crusaders",
-					members: ["sashivra", "ragtk", "aharinat", "sdeviamm", "ansagar", "gisrikan", "kirachan", "supaturu", "mukuljai", "dchimata", "vdheenad", "rajkanda", "neeljain", "raarasu"]
+					team: "CaveMen",
+					members: ["bdoraisa", "gopks", "mokathir", "smahesh", "gosivaku", "mgundapp"]
+				},{
+					team: "Crusaders",
+					members: ["supaturu", "aharinat", "jhimdey", "anigopal", "karkarki", "mamysore"]
+				},{
+					team: "Yoddhas",
+					members: ["raarasu", "neeljain", "siravind", "kavyvish", "gaurchau", "kareghu"]
+				},{
+					team: "Sparkles",
+					members: ["kkakuman", "ragtk", "reparame", "anukum3", "ckunjumo", "chindcha"]
 				},{
 					team: "Falcons",
-					members: ["jyjoshi", "amarkum", "ckunjumo", "abhigup3", "chindcha", "satkadam", "nejm"]
-				},{
-					team: "DayDreamers / Mafia",
-					members: ["vishashe", "amagniho", "usantra", "prukey", "anurjain", "jaslekau", "namahesh", "ravkota", "parmj", "ranjchan", "sandibha", "ssaikia"]
-				},{
-					team: "Yappers / Mavericks",
-					members: ["mshet", "gopks", "jayas", "sharim", "jpannikk", "shivagar", "isdas", "praveesi", "fariff", "manabr", "mokathir", "shailesi"]
-				},{
-					team: "Smart / Garuda",
-					members: ["smahesh", "racray", "jyos", "sabhiram", "bdoraisa", "sdandu", "rvj", "velanka", "gosivaku", "bhanprak"]
+					members: ["amarkum", "satkadam", "nejm", "jyjoshi", "sabitasa"]
 				}]
 			},
 			teststatistics: {
@@ -189,7 +189,7 @@ var ProductManagement = function(product) {
 		cvp: {
 			product: product,
 			staticviolations: {
-				url: "http://bxb-ccbu-sonar:9000/drilldown/violations/457335"
+				url: "http://bxb-ccbu-sonar:9000/drilldown/violations/609935"
 			},
 			defectcount: {
 				href: "/enotify-v8/sites/ccbu/output/website/bug_list_4_buglist.html"
@@ -199,10 +199,10 @@ var ProductManagement = function(product) {
 				path: "/jenkins/view/CVP/job/CVP_AUROVILLE_CI/lastSuccessfulBuild/testReport/api/json"
 			},
 			linecoverage: {
-				url: "http://bxb-ccbu-sonar:9000/components/index/457335"
+				url: "http://bxb-ccbu-sonar:9000/components/index/609935"
 			},
 			branchcoverage: {
-				url: "http://bxb-ccbu-sonar:9000/components/index/457335"
+				url: "http://bxb-ccbu-sonar:9000/components/index/609935"
 			},
 			defectstatistics: {
 				url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_4_buglist.html"
@@ -264,7 +264,42 @@ var ProductManagement = function(product) {
 			teststatistics: {
 				file: "vb-tests.txt"
 			}
-		}
+		},
+                sm: {
+                        product: product,
+                        staticviolations: {
+                                url: "http://bxb-ccbu-sonar.cisco.com:9000/drilldown/violations/45368"
+                        },
+                        defectcount: {
+                                href: "/enotify-v8/sites/ccbu/output/website/bug_list_7_buglist.html"
+                        },
+                        cibuild: {
+                                server: "bigbend",
+                                path: "/jenkins/view/CCP/job/SocialMiner_Master_Branch_Deploy/lastSuccessfulBuild/testReport/api/json"
+                        },
+                        linecoverage: {
+                                url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/45368"
+                        },
+                        branchcoverage: {
+                                url: "http://bxb-ccbu-sonar.cisco.com:9000/components/index/45368"
+                        },
+                        defectstatistics: {
+                                url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_7_buglist.html"
+                        },
+                        defectdistribution: {
+                                url: "http://enotify9-1.cisco.com/enotify-v8/sites/ccbu/output/website/bug_list_7_buglist.html",
+                                teams: [{
+                                        team: "Charlie",
+                                        members: ["krlakshm","manabr","parmj","prukey","ravkota","rvj","sandibha"]
+                                },{
+                                        team: "Tango",
+                                        members: ["fariff","jaslekau","namahesh","racray","ranjchan"]
+                                }]
+                        },
+                        teststatistics: {
+                                file: "sm-tests.txt"
+                        }
+                }
 	};
 
 	return {
